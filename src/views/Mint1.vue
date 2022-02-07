@@ -89,13 +89,19 @@ export default {
       this.updateAmountX();
     },
     updateAmountX() {
-      if (!this.amount_y || !this.selectedPool || !this.selectedPool.hasLiquidity()) return;
-      const k = this.selectedPool.balances.xn / this.selectedPool.balances.yn;
+      const pool = this.selectedPool;
+      if (!this.amount_x || !pool || !pool.hasLiquidity() && !pool.info.mid_price) return;
+      const k = !pool.hasLiquidity() && pool.info.mid_price
+        ? 1/pool.info.mid_price * (1-pool.info.alpha) / pool.info.alpha
+        : pool.balances.xn / pool.balances.yn;
       this.amount_x = (k * this.amount_y).toFixed();
     },
     updateAmountY() {
-      if (!this.amount_x || !this.selectedPool || !this.selectedPool.hasLiquidity()) return;
-      const k = this.selectedPool.balances.xn / this.selectedPool.balances.yn;
+      const pool = this.selectedPool;
+      if (!this.amount_x || !pool || !pool.hasLiquidity() && !pool.info.mid_price) return;
+      const k = !pool.hasLiquidity() && pool.info.mid_price
+        ? 1/pool.info.mid_price * (1-pool.info.alpha) / pool.info.alpha
+        : pool.balances.xn / pool.balances.yn;
       this.amount_y = (this.amount_x / k).toFixed();
     },
     handleSubmit() {
