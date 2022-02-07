@@ -1,0 +1,95 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 1685988 */
+  src: url('iconfont.woff2?t=1644228769221') format('woff2'),
+       url('iconfont.woff?t=1644228769221') format('woff'),
+       url('iconfont.ttf?t=1644228769221') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.iconmark-github:before {
+  content: "\e667";
+}
+
+.iconandroidcheckbox:before {
+  content: "\e65a";
+}
+
+.iconandroidcheckboxblank:before {
+  content: "\e637";
+}
+
+.iconindeterminate_check_box_px_rounded:before {
+  content: "\edaf";
+}
+
+.iconplus-small:before {
+  content: "\e69d";
+}
+
+.iconmenu:before {
+  content: "\e609";
+}
+
+.iconcheck:before {
+  content: "\e607";
+}
+
+.iconbullet:before {
+  content: "\e61e";
+}
+
+.iconunlock:before {
+  content: "\e672";
+}
+
+.iconwarning:before {
+  content: "\e62c";
+}
+
+.iconwallet:before {
+  content: "\e846";
+}
+
+.iconsearch:before {
+  content: "\e6f2";
+}
+
+.iconuser:before {
+  content: "\e66f";
+}
+
+.icongo:before {
+  content: "\e6cb";
+}
+
+.iconarrow-up:before {
+  content: "\e75c";
+}
+
+.iconarrow-down:before {
+  content: "\e75d";
+}
+
+.iconback:before {
+  content: "\e6cc";
+}
+
+.iconclose:before {
+  content: "\e63e";
+}
+
+.iconexternal-link:before {
+  content: "\e636";
+}
+
+.iconswitch:before {
+  content: "\e620";
+}
+

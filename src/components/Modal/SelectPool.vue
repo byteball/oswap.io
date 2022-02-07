@@ -19,8 +19,8 @@
         :key="i"
       >
         <div class="flex-auto">
-          <Ticker :asset="`${pool.asset0}_${pool.asset1}`" />
-          <span class="text-gray ml-2" v-text="`${pool.swapFee / 1e9}%`" />
+          <Ticker :asset="`${pool.x_asset}_${pool.y_asset}`" />
+          <span class="text-gray ml-2" v-text="`${pool.swapFee * 100}%`" />
         </div>
         <Amount
           class="ml-2"
@@ -53,7 +53,7 @@ export default {
     const pools = [];
     const promises = [];
     Object.entries(this.settings.pools).forEach(([address, pool]) => {
-      const p = new Pool(address, [pool.asset0, pool.asset1]);
+      const p = new Pool(address, [pool.x_asset, pool.y_asset]);
       promises.push(p.init());
       pools.push(p);
     });
@@ -74,8 +74,8 @@ export default {
         const assets = this.settings.assets;
         this.pools = [];
         Object.entries(this.allPools).forEach(([address, pool]) => {
-          let str = `${assets[pool.asset0].symbol}-${assets[pool.asset1].symbol}`;
-          str += `${pool.asset0}-${pool.asset1}`;
+          let str = `${assets[pool.x_asset].symbol}-${assets[pool.y_asset].symbol}`;
+          str += `${pool.x_asset}-${pool.y_asset}`;
           if (pool.asset && str.toLowerCase().includes(this.query.toLowerCase())) {
             this.pools.push(pool);
           }

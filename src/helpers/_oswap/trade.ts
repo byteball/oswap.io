@@ -14,13 +14,13 @@ export default class Trade {
     this.outputAsset = outputAsset;
   }
 
-  getRoute(inputAmount) {
+  getRoute(inputAmount, share = 1) {
     let bestRoute: any;
     let maxAmount = 0;
     // @ts-ignore
     this.routes.forEach((route, i) => {
       // @ts-ignore
-      const outputAmount = route.getAmountBought(inputAmount, this.inputAsset);
+      const outputAmount = route.getAmountBought(inputAmount, this.inputAsset, share);
       if (outputAmount > maxAmount) {
         maxAmount = outputAmount;
         bestRoute = route;
@@ -29,23 +29,41 @@ export default class Trade {
     return bestRoute;
   }
 
-  getAmountBought(inputAmount) {
+  // share: what share of inputAmount should be used to buy. The rest is a safety margin in case the prices change due to interest or other trades
+  getAmountBoughtAndData(inputAmount, share = 1) {
+    let bestRoute: any;
+    let maxAmount = 0;
+    let bestRouteData;
+    // @ts-ignore
+    this.routes.forEach((route, i) => {
+      // @ts-ignore
+      const { net_amount_out, data } = route.getAmountBoughtAndData(inputAmount, this.inputAsset, share);
+      if (net_amount_out > maxAmount) {
+        maxAmount = net_amount_out;
+        bestRouteData = data;
+        bestRoute = route;
+      }
+    });
+    return { net_amount_out: maxAmount, data: bestRouteData, route: bestRoute };
+  }
+
+  getAmountBought(inputAmount, share = 1) {
     let maxAmount = 0;
     // @ts-ignore
     this.routes.forEach((route, i) => {
       // @ts-ignore
-      const outputAmount = route.getAmountBought(inputAmount, this.inputAsset);
+      const outputAmount = route.getAmountBought(inputAmount, this.inputAsset, share);
       if (outputAmount > maxAmount) maxAmount = outputAmount;
     });
     return maxAmount;
   }
 
-  getAmountSold(outputAmount) {
+  getAmountSold(outputAmount, share = 1) {
     let minAmount = 0;
     // @ts-ignore
     this.routes.forEach((route, i) => {
       // @ts-ignore
-      const inputAmount = route.getAmountSold(outputAmount, this.outputAsset);
+      const inputAmount = route.getAmountSold(outputAmount, this.outputAsset, share);
       if (inputAmount > 0) {
         if (!minAmount || inputAmount < minAmount) minAmount = inputAmount;
       }
@@ -79,7 +97,7 @@ export default class Trade {
     const pools = addresses.map(address => {
       const pool = this.factory.pools[address];
       // @ts-ignore
-      return new Pool(address, [pool.asset0, pool.asset1]);
+      return new Pool(address, [pool.x_asset, pool.y_asset]);
     });
     return new Route(pools);
   }

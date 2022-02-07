@@ -26,7 +26,7 @@
           :value="getBalance(balances, i)"
         />
       </a>
-      <router-link :to="{ name: 'create' }" class="d-block py-2 px-4 text-white">
+      <router-link v-if="!values" :to="{ name: 'create' }" class="d-block py-2 px-4 text-white">
         Create a pool
       </router-link>
     </div>

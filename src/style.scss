@@ -1,6 +1,6 @@
 @import '~@vue/ui/dist/vue-ui.css';
 @import "~primer-support/index.scss";
-@import "~//at.alicdn.com/t/font_1685988_fa6cqqpcxcq.css";
+@import './assets/fonts/iconfont/iconfont.css';
 
 $primary: #1500ff;
 $secondary: #bbffff;
@@ -155,6 +155,12 @@ label {
     border: 1px solid $gray-600;
     cursor: not-allowed;
   }
+}
+
+a.btn-submit.disabled {
+  background-color: $gray-600;
+  border: 1px solid $gray-600;
+  cursor: not-allowed !important;
 }
 
 ::-webkit-scrollbar-thumb {

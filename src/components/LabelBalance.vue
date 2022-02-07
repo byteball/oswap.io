@@ -1,7 +1,7 @@
 <template>
   <span v-if="balance">
     (max
-    <a class="color-gray-6" @click="select"> <Amount :asset="asset" :value="balance" /> </a>)
+    <a class="color-gray-6" @click="select"> <Amount :asset="decimals_asset || asset" :value="balance" /> </a>)
   </span>
 </template>
 
@@ -9,7 +9,7 @@
 import { getBalance } from '@/helpers/_oswap';
 
 export default {
-  props: ['asset'],
+  props: ['asset', 'decimals_asset'],
   computed: {
     balance() {
       const { balances } = this.auth;

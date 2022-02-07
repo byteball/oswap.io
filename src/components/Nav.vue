@@ -42,12 +42,12 @@
           >
           <router-link
             :to="{
-              name: 'send',
+              name: this.$route.name === 'sell-leverage' ? this.$route.name : 'buy-leverage',
               params: { poolAddress: this.$route.params.poolAddress },
               query: this.$route.query
             }"
             class="d-block col-4 rounded-2"
-            >Send</router-link
+            >Leverage</router-link
           >
           <router-link
             :to="{

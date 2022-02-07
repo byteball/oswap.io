@@ -1,25 +1,114 @@
 <template>
   <div v-if="pool">
     <div>
-      <label class="d-block">Swap fee</label>
-      <span class="text-white" v-text="`${pool.swapFee / 1e9}%`" />
+      <div class="mb-2">
+        <div class="d-block">
+          <label>Swap fee</label>
+          <span class="text-white ml-2" v-text="`${pool.swapFee * 100}%`" />
+          <span v-if="!details"> ...</span>
+          <a class="d-flex float-right" @click="details = !details">
+            <span class="flex-auto text-gray" v-text="detailsText" />
+            <Icon class="text-gray" :class="{'mt-1': details}" :name="details ? 'arrow-up' : 'arrow-down'" />
+          </a>
+        </div>
+        <div v-if="details">
+          <div class="d-block">
+            <label>Exit fee</label>
+            <span class="text-white ml-2" v-text="`${pool.info.exit_fee * 100}%`" />
+          </div>
+          <div class="d-block">
+            <label>Arb tax</label>
+            <span class="text-white ml-2" v-text="`${pool.info.arb_profit_tax * 100}%`" />
+          </div>
+          <div class="d-block">
+            <label>Leverage profit tax</label>
+            <span class="text-white ml-2" v-text="`${pool.info.leverage_profit_tax * 100}%`" />
+          </div>
+          <div class="d-block">
+            <label>Leverage token tax</label>
+            <span class="text-white ml-2" v-text="`${pool.info.leverage_token_tax * 100}%`" />
+          </div>
+          <div class="d-block">
+            <label>Base interest rate</label>
+            <span class="text-white ml-2" v-text="`${pool.info.base_interest_rate * 100}%`" />
+          </div>
+          <div class="d-block">
+            <label>Token weights</label>
+            <span class="text-white ml-2" v-text="`${pool.info.alpha * 100}% / ${(1 - pool.info.alpha) * 100}%`" />
+          </div>
+          <div class="d-block">
+            <label>Pool leverage</label>
+            <span class="text-white ml-2" v-text="`${pool.info.pool_leverage}`" />
+          </div>
+          <div class="d-block" v-if="pool.info.mid_price">
+            <label>Mid-price</label>
+            <span class="text-white ml-2" v-text="`${pool.info.mid_price}`" />
+          </div>
+          <div class="d-block" v-if="pool.info.mid_price">
+            <label>Price deviation</label>
+            <span class="text-white ml-2" v-text="`${pool.info.price_deviation}`" />
+          </div>
+          <div class="d-block">
+            <label>Price range</label>
+            <span class="text-white ml-2" v-text="`${pool.p_min * priceMultiplier} to ${pool.p_max * priceMultiplier}`" />
+          </div>
+        </div>
+      </div>
+      <!--div>
+        <div class="d-inline-block">
+          <label class="d-block">Swap fee</label>
+          <span class="text-white" v-text="`${pool.swapFee * 100}%`" />
+        </div>
+        <div class="d-inline-block ml-4">
+          <label class="d-block">Exit fee</label>
+          <span class="text-white" v-text="`${pool.info.exit_fee * 100}%`" />
+        </div>
+        <div class="d-inline-block ml-4">
+          <label class="d-block">Arb tax</label>
+          <span class="text-white" v-text="`${pool.info.arb_profit_tax * 100}%`" />
+        </div>
+      </div>
+      <div>
+        <div class="d-inline-block">
+          <label class="d-block">Leverage profit tax</label>
+          <span class="text-white" v-text="`${pool.info.leverage_profit_tax * 100}%`" />
+        </div>
+        <div class="d-inline-block ml-4">
+          <label class="d-block">Leverage token tax</label>
+          <span class="text-white" v-text="`${pool.info.leverage_token_tax * 100}%`" />
+        </div>
+        <div class="d-inline-block ml-4">
+          <label class="d-block">Base interest rate</label>
+          <span class="text-white" v-text="`${pool.info.base_interest_rate * 100}%`" />
+        </div>
+      </div>
+      <div>
+        <div class="d-inline-block">
+          <label class="d-block">Token weights</label>
+          <span class="text-white" v-text="`${pool.info.alpha * 100}% / ${(1 - pool.info.alpha) * 100}%`" />
+        </div>
+        <div class="d-inline-block ml-4">
+          <label class="d-block">Pool leverage</label>
+          <span class="text-white" v-text="`${pool.info.pool_leverage}`" />
+        </div>
+      </div-->
       <div v-if="pool.hasLiquidity()">
         <label class="d-block">Prices</label>
         <div class="text-white">
-          1 <Ticker :asset="pool.asset0" /> ≈
-          <Amount :value="pool.getPrice(pool.asset0, this.settings)" :asset="pool.asset1" />
-          &nbsp;<Ticker :asset="pool.asset1" />
+          1 <Ticker :asset="pool.x_asset" /> ≈
+          <Amount :value="pool.getPrice(pool.x_asset, this.settings)" :asset="pool.y_asset" />
+          &nbsp;<Ticker :asset="pool.y_asset" />
         </div>
         <div class="text-white">
-          1 <Ticker :asset="pool.asset1" /> ≈
-          <Amount :value="pool.getPrice(pool.asset1, this.settings)" :asset="pool.asset0" />
-          &nbsp;<Ticker :asset="pool.asset0" />
+          1 <Ticker :asset="pool.y_asset" /> ≈
+          <Amount :value="pool.getPrice(pool.y_asset, this.settings)" :asset="pool.x_asset" />
+          &nbsp;<Ticker :asset="pool.x_asset" />
         </div>
       </div>
       <label class="d-block">Pool size</label>
       <a :href="_explorerLink(pool.address)" target="_blank">
-        <Amount :value="pool.reserve0" :asset="pool.asset0" /> <Ticker :asset="pool.asset0" /> +
-        <Amount :value="pool.reserve1" :asset="pool.asset1" /> <Ticker :asset="pool.asset1" />
+        <Amount :value="pool.balances.xn" :asset="pool.x_asset" /> <Ticker :asset="pool.x_asset" /> +
+        <Amount :value="pool.balances.yn" :asset="pool.y_asset" /> <Ticker :asset="pool.y_asset" />
         <span
           v-if="pool.hasLiquidity() && pool.marketcap"
           v-text="` ≈ $ ${pool.marketcap.toFixed(2)}`"
@@ -44,12 +133,25 @@ export default {
   props: ['pool'],
   data() {
     return {
+      details: false,
       share: 0
     };
   },
   created() {
     const balance = getBalance(this.auth.balances, this.pool.asset);
     this.share = parseFloat(((100 / this.pool.supply) * balance).toFixed(3));
+  },
+  computed: {
+    priceMultiplier(){
+      const x_asset = this.settings.assets[this.pool.x_asset];
+      const y_asset = this.settings.assets[this.pool.y_asset];
+      const x_decimals = x_asset ? x_asset.decimals : 0;
+      const y_decimals = y_asset ? y_asset.decimals : 0;
+      return 10**(x_decimals - y_decimals);
+    },
+    detailsText(){
+      return this.details ? "hide details" : "show all details";
+    }
   },
   watch: {
     async pool(value, oldValue) {

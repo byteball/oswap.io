@@ -33,7 +33,7 @@ export default {
     ticker() {
       if (utils.isValidAddress(this.input)) {
         const pool = this.settings.pools[this.input];
-        return `${pool.asset0}_${pool.asset1}`;
+        return `${pool.x_asset}_${pool.y_asset}`;
       }
       return 'error';
     }

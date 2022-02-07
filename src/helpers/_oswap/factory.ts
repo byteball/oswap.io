@@ -1,4 +1,3 @@
-import { numberFromSeed } from './';
 
 export default class Factory {
   public pools: [];
@@ -10,10 +9,7 @@ export default class Factory {
   }
 
   getPoolsByPair(assetA, assetB) {
-    const order = numberFromSeed(assetA) > numberFromSeed(assetB);
-    const asset0 = order ? assetA : assetB;
-    const asset1 = order ? assetB : assetA;
-    const pair = this.pairs[`${asset0}_${asset1}`];
+    const pair = this.pairs[(assetA < assetB) ? (assetA + '_' + assetB) : (assetB + '_' + assetA)];
     return pair && pair.pools ? pair.pools : [];
   }
 }

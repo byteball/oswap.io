@@ -3,42 +3,42 @@
     <div class="container-sm px-3">
       <PoolNav />
       <BoxSelectPool :poolAddress="poolAddress" v-model="selectedPool" />
-      <template v-if="selectedPool.asset0">
+      <template v-if="selectedPool.x_asset">
         <Box class="d-flex">
           <div class="flex-auto">
-            <label for="amount0" class="d-block">
+            <label for="amount_x" class="d-block">
               Deposit
-              <LabelBalance :asset="selectedPool.asset0" @select="setAmount0" />
+              <LabelBalance :asset="selectedPool.x_asset" @select="setAmountX" />
             </label>
             <InputAmount
-              id="amount0"
-              v-model="amount0"
-              :asset="selectedPool.asset0"
-              @change="updateAmount1"
+              id="amount_x"
+              v-model="amount_x"
+              :asset="selectedPool.x_asset"
+              @change="updateAmountY"
             />
           </div>
           <div class="text-right mt-4 ml-4">
-            <router-link :to="'/asset/' + selectedPool.asset0" class="btn-mktg">
-              <Ticker :asset="selectedPool.asset0" />
+            <router-link :to="'/asset/' + selectedPool.x_asset" class="btn-mktg">
+              <Ticker :asset="selectedPool.x_asset" />
             </router-link>
           </div>
         </Box>
         <Box class="d-flex">
           <div class="flex-auto">
-            <label for="amount1" class="d-block">
+            <label for="amount_y" class="d-block">
               Deposit
-              <LabelBalance :asset="selectedPool.asset1" @select="setAmount1" />
+              <LabelBalance :asset="selectedPool.y_asset" @select="setAmountY" />
             </label>
             <InputAmount
-              id="amount1"
-              v-model="amount1"
-              :asset="selectedPool.asset1"
-              @change="updateAmount0"
+              id="amount_y"
+              v-model="amount_y"
+              :asset="selectedPool.y_asset"
+              @change="updateAmountX"
             />
           </div>
           <div class="text-right mt-4 ml-4">
-            <router-link :to="'/asset/' + selectedPool.asset1" class="btn-mktg">
-              <Ticker :asset="selectedPool.asset1" />
+            <router-link :to="'/asset/' + selectedPool.y_asset" class="btn-mktg">
+              <Ticker :asset="selectedPool.y_asset" />
             </router-link>
           </div>
         </Box>
@@ -47,7 +47,7 @@
         <button
           class="btn-submit px-6 rounded-2 mb-3"
           type="submit"
-          :disabled="!selectedPool || !amount0"
+          :disabled="!selectedPool || !amount_x"
         >
           Add liquidity
         </button>
@@ -66,69 +66,53 @@ export default {
   data() {
     return {
       selectedPool: false,
-      amount0: '',
-      amount1: '',
+      amount_x: '',
+      amount_y: '',
       poolAddress: this.$route.params.poolAddress
     };
   },
   watch: {
     async selectedPool(value, oldValue) {
       if (value !== oldValue) {
-        this.amount0 = '';
-        this.amount1 = '';
+        this.amount_x = '';
+        this.amount_y = '';
       }
     }
   },
   methods: {
-    setAmount0(amount) {
-      this.amount0 = amount;
-      this.updateAmount1();
+    setAmountX(amount) {
+      this.amount_x = amount;
+      this.updateAmountY();
     },
-    setAmount1(amount) {
-      this.amount1 = amount;
-      this.updateAmount0();
+    setAmountY(amount) {
+      this.amount_y = amount;
+      this.updateAmountX();
     },
-    updateAmount0() {
-      if (!this.amount1 || !this.selectedPool || !this.selectedPool.hasLiquidity()) return;
-      const k = this.selectedPool.reserve0 / this.selectedPool.reserve1;
-      this.amount0 = (k * this.amount1).toFixed();
+    updateAmountX() {
+      if (!this.amount_y || !this.selectedPool || !this.selectedPool.hasLiquidity()) return;
+      const k = this.selectedPool.balances.xn / this.selectedPool.balances.yn;
+      this.amount_x = (k * this.amount_y).toFixed();
     },
-    updateAmount1() {
-      if (!this.amount0 || !this.selectedPool || !this.selectedPool.hasLiquidity()) return;
-      const k = this.selectedPool.reserve0 / this.selectedPool.reserve1;
-      this.amount1 = (this.amount0 / k).toFixed();
+    updateAmountY() {
+      if (!this.amount_x || !this.selectedPool || !this.selectedPool.hasLiquidity()) return;
+      const k = this.selectedPool.balances.xn / this.selectedPool.balances.yn;
+      this.amount_y = (this.amount_x / k).toFixed();
     },
     handleSubmit() {
       const assets = this.settings.assets;
-      const address =
-        !this.selectedPool.reserve0 || !this.selectedPool.reserve1 // check if pool has ratio
-          ? this.selectedPool.address
-          : this.settings.poolToProxy[this.selectedPool.address] || this.selectedPool.address;
-      let amount0 = this.amount0;
-      let amount1 = this.amount1;
-      // add 2000 extra bytes when via proxy
-      if (address !== this.selectedPool.address) {
-        if (this.selectedPool.asset0 === 'base') {
-          amount0 += 2e3;
-        }
-        if (this.selectedPool.asset1 === 'base') {
-          amount1 += 2e3;
-        }
-      }
+      const address = this.selectedPool.address;
+      let amount_x = this.amount_x;
+      let amount_y = this.amount_y;
       const payments = [
-        { address, amount: Math.floor(parseFloat(amount0)), asset: this.selectedPool.asset0 },
-        { address, amount: Math.floor(parseFloat(amount1)), asset: this.selectedPool.asset1 }
+        { address, amount: Math.floor(parseFloat(amount_x)), asset: this.selectedPool.x_asset },
+        { address, amount: Math.floor(parseFloat(amount_y)), asset: this.selectedPool.y_asset }
       ];
-      if (this.selectedPool.asset0 !== 'base' && this.selectedPool.asset1 !== 'base')
+      if (this.selectedPool.x_asset !== 'base' && this.selectedPool.y_asset !== 'base')
         payments.push({ address, amount: 1e4 });
       const paymentJsonBase64 = generatePaymentMessage({ payments });
-      const asset0Str =
-        assets[this.selectedPool.asset0].symbol || shorten(this.selectedPool.asset0);
-      const asset1Str =
-        assets[this.selectedPool.asset1].symbol || shorten(this.selectedPool.asset1);
-      const pool =
-        `${asset0Str}-${asset1Str}` +
-        (address !== this.selectedPool.address ? ' via proxy AA' : '');
+      const assetXStr = assets[this.selectedPool.x_asset].symbol || shorten(this.selectedPool.x_asset);
+      const assetYStr = assets[this.selectedPool.y_asset].symbol || shorten(this.selectedPool.y_asset);
+      const pool = `${assetXStr}-${assetYStr}`;
       const message = `Add liquidity ${pool}\n[add-liquidity](payment:${paymentJsonBase64})`;
       const requestId = randomBytes(32).toString('base64');
       texto.on('pairing', msg => {

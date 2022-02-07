@@ -50,7 +50,7 @@
         />
       </Box>
       <Box v-if="rate">
-        <label for="input">Exchange rate</label>
+        <label for="input">Average price</label>
         <div class="text-white">
           1 <Ticker :asset="outputAsset" /> =
           {{ parseFloat(rate.toFixed(this.getDecimals(inputAsset))) }}
@@ -62,16 +62,22 @@
           <Ticker :asset="outputAsset" />
         </div>
       </Box>
+      <Box v-else-if="tooMuch">
+        <p class="m-0">
+          The price would change too much, try a smaller amount.
+        </p>
+      </Box>
       <BoxSelectThreshold v-model="bounceThreshold" />
       <div class="text-center mb-4">
         <button
           class="btn-submit px-6 rounded-2 mb-4"
           type="submit"
-          :disabled="!inputAsset || !outputAsset || !inputAmount || !outputAmount"
+          :disabled="!inputAsset || !outputAsset || !inputAmount || !outputAmount || needLogin || tooMuch"
         >
           <template v-if="$route.name === 'send'">Send</template>
           <template v-else>Swap</template>
         </button>
+        <div v-if="needLogin">This swap would be multi-hop, please <a :href="invite">log in</a> to use it.</div>
       </div>
     </div>
   </form>
@@ -97,6 +103,8 @@ export default {
       outputAsset: '',
       inputAmount: '',
       outputAmount: '',
+      multiHop: false,
+      tooMuch: false,
       bounceThreshold: 1,
       to: this.$route.query.to,
       rate: 0
@@ -109,11 +117,11 @@ export default {
         ? [this.outputAsset, 'base']
         : ['base', this.outputAsset];
     } else if (this.id) {
-      const info = await getInfo(this.id);
+      const {info} = await getInfo(this.id);
       if (info && Object.keys(info).length) {
         [this.inputAsset, this.outputAsset] = this.$route.query.reverse
-          ? [info.asset1, info.asset0]
-          : [info.asset0, info.asset1];
+          ? [info.y_asset, info.x_asset]
+          : [info.x_asset, info.y_asset];
       }
     }
   },
@@ -131,6 +139,17 @@ export default {
       }
     }
   },
+  computed: {
+    needLogin(){
+      return this.multiHop && this.$route.name !== 'send' && !this.auth.address;
+    },
+    invite(){
+      return `${this.auth.invite}#login`;
+    },
+    share(){
+      return this.bounceThreshold === 100 ? 0.99 : 1 - this.bounceThreshold/100;
+    },
+  },
   methods: {
     getDecimals(assetId) {
       return this.settings.decimals[assetId] || 0;
@@ -142,7 +161,7 @@ export default {
       }
       const inputAmount = toString(this.inputAmount, this.getDecimals(this.inputAsset));
       const outputAmount = toString(this.outputAmount, this.getDecimals(this.outputAsset));
-      const rate = parseFloat((inputAmount / outputAmount).toFixed(6));
+      const rate = parseFloat((inputAmount / outputAmount).toPrecision(6));
       if (rate <= 0 || rate === Infinity) {
         this.rate = 0;
         return;
@@ -167,18 +186,35 @@ export default {
       await this.trade.init();
     },
     handleSubmit() {
-      const data = {};
+      let min_amount_out = 0;
       if (this.bounceThreshold < 100) {
         if (!this.bounceThreshold) {
-          data.amount_out_min = this.outputAmount;
+          min_amount_out = this.outputAmount;
         } else {
-          data.amount_out_min = Math.round(this.outputAmount * (1 - this.bounceThreshold / 100));
+          min_amount_out = Math.round(this.outputAmount * (1 - this.bounceThreshold / 100));
         }
       }
-      const route = this.trade.getRoute(this.inputAmount);
+      const {route, data} = this.trade.getAmountBoughtAndData(this.inputAmount, this.share);
+      const last_hop = data.hops ? data.hops[data.hops.length-1] : null;
+      const last_hop_data = data.hops ? last_hop.data : data;
+      if (min_amount_out)
+        last_hop_data.min_amount_out = min_amount_out;
       const address = route.pools[0].address;
-      if (this.to && this.$route.name === 'send') data.to = this.to;
-      if (route.pools[1]) data.to_aa = route.pools[1].address;
+      const change_address = this.auth.address || this.$route.name === 'send' && this.to;
+      if (change_address && data.hops)
+        data.hops.forEach(hop => {
+          hop.change_address = change_address;
+        });
+      if (this.to && this.$route.name === 'send') {
+        if (!data.hops)
+          data.hops = [];
+        data.hops.push({address: this.to});
+      }
+      else{
+        if (data.hops)
+          data.hops.push({address: this.auth.address});
+      }
+      console.log('data', data)
       const url = generateUri(address, data, this.inputAmount, this.inputAsset);
       if (navigator.userAgent.indexOf('Firefox') != -1) {
         const opener = window.open(url, '', 'width=1,height=1,resizable=no');
@@ -191,13 +227,35 @@ export default {
     },
     updateOutputAmount() {
       if (!this.inputAsset || !this.outputAsset) return;
-      if (this.inputAmount) this.outputAmount = this.trade.getAmountBought(this.inputAmount) || '';
-      this.updateRate();
+      if (this.inputAmount) {
+        try {
+          const {net_amount_out, data, route} = this.trade.getAmountBoughtAndData(this.inputAmount, this.share);
+          this.outputAmount = net_amount_out || '';
+          this.multiHop = !!data.hops;
+          this.tooMuch = false;
+          this.updateRate();
+        }
+        catch(e){
+          console.log('getAmountBoughtAndData failed', e)
+          this.tooMuch = true;
+          this.rate = null;
+        }
+      }
     },
     updateInputAmount() {
       if (!this.inputAsset || !this.outputAsset) return;
-      if (this.outputAmount) this.inputAmount = this.trade.getAmountSold(this.outputAmount) || '';
-      this.updateRate();
+      if (this.outputAmount){
+        try{
+          this.inputAmount = this.trade.getAmountSold(this.outputAmount, this.share) || '';
+          this.tooMuch = false;
+          this.updateRate();
+        }
+        catch(e){
+          console.log('getAmountSold failed', e)
+          this.tooMuch = true;
+          this.rate = null;
+        }
+      }
     }
   }
 };

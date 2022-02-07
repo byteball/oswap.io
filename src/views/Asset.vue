@@ -28,7 +28,7 @@
     <Box v-for="(pool, i) in pools" :key="i">
       <label class="d-block">Pool</label>
       <router-link class="d-block" :to="{ name: 'mint1', params: { poolAddress: pool.address } }">
-        <Ticker class="h2" :asset="`${pool.asset0}_${pool.asset1}`" />
+        <Ticker class="h2" :asset="`${pool.x_asset}_${pool.y_asset}`" />
       </router-link>
       <PoolInfo :pool="pool" />
     </Box>
@@ -52,9 +52,9 @@ export default {
     const pools = [];
     const promises = [];
     Object.entries(this.settings.pools)
-      .filter(([address, pool]) => pool.asset0 === this.id || pool.asset1 === this.id)
+      .filter(([address, pool]) => pool.x_asset === this.id || pool.y_asset === this.id)
       .forEach(([address, pool]) => {
-        const p = new Pool(address, [pool.asset0, pool.asset1]);
+        const p = new Pool(address, [pool.x_asset, pool.y_asset]);
         promises.push(p.init());
         pools.push(p);
       });

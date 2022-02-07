@@ -40,7 +40,7 @@
           <Icon name="external-link" class="ml-1" size="18" />
         </a>
       </p>
-      <p v-for="(item, i) in { factory, pool, proxies, registry }" :key="i">
+      <p v-for="(item, i) in { factory, pool, registry }" :key="i">
         <label :for="i" class="d-block" v-text="item.name" />
         <span v-for="(address, j) in item.addresses" :key="j">
           <a :id="i" :href="_explorerLink(address)" target="_blank" class="d-block py-2 text-white">
@@ -62,7 +62,6 @@ import pkg from '@/../package.json';
 import {
   FACTORY_ADDRESS,
   BASE_ADDRESS,
-  PROXY_BASE_ADDRESSES,
   TOKEN_REGISTRY_ADDRESS
 } from '@/helpers/_oswap';
 import config from '@/helpers/config';
@@ -74,7 +73,6 @@ export default {
       pkg,
       factory: { name: 'Factory address', addresses: [FACTORY_ADDRESS] },
       pool: { name: 'Pool base address', addresses: [BASE_ADDRESS] },
-      proxies: { name: 'Proxy base address(es)', addresses: PROXY_BASE_ADDRESSES },
       registry: { name: 'Registry address', addresses: [TOKEN_REGISTRY_ADDRESS] },
       config
     };

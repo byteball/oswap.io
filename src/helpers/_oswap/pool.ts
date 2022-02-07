@@ -1,49 +1,107 @@
-import { getInfo, getAmountBought, getAmountSold } from './';
+import { getInfo } from './';
+import { getPoolState, getSwapParams, getSwapParamsByOutput, getRedemptionResult, toAsset, getLeveragedBuyParams, getLeveragedSellParams, setLogger } from 'oswap-v2-sdk';
+
+type Balance = {
+  x: number;
+  y: number;
+  xn: number;
+  yn: number;
+};
+
+//setLogger(console.log);
 
 export default class Pool {
   public ready: boolean = false;
   public address: string;
-  public asset0: string;
-  public asset1: string;
+  public x_asset: string;
+  public y_asset: string;
+  public Lambda: number = 0;
+  public p_min: number = 0;
+  public p_max: number = Infinity;
   public swapFee: number = 0;
   public asset?: string;
-  public reserve0?: number;
-  public reserve1?: number;
   public supply?: number;
   public base?: number;
+  public balances: Balance = { x: 0, y: 0, xn: 0, yn: 0 };
+  public params: Object = {};
+  public stateVars: Object = {};
+  public info: Object = {};
 
   constructor(address, assets) {
-    this.asset0 = assets[0];
-    this.asset1 = assets[1];
+    this.x_asset = assets[0];
+    this.y_asset = assets[1];
     this.address = address;
   }
 
   async init() {
-    const info = await getInfo(this.address);
-    this.swapFee = Math.floor(parseFloat(info.swap_fee));
-    this.asset = info.asset;
-    this.reserve0 = Math.floor(parseFloat(info.reserve0));
-    this.reserve1 = Math.floor(parseFloat(info.reserve1));
-    this.supply = Math.floor(parseFloat(info.supply));
-    if (info.asset0 === 'base') this.base = info.reserve0;
-    if (info.asset1 === 'base') this.base = info.reserve1;
+    const { info, stateVars, params } = await getInfo(this.address);
+    this.stateVars = stateVars;
+    this.params = params;
+    this.info = info;
+    this.x_asset = params.x_asset;
+    this.y_asset = params.y_asset;
+    this.swapFee = info.swap_fee;
+    this.Lambda = info.Lambda;
+    this.asset = info.lp_shares.asset;
+    if (info.balances)
+      this.balances = info.balances;
+    if (info.mid_price) {
+      const beta = 1 - info.alpha;
+      this.p_max = info.alpha / beta * info.price_deviation ** (1 / beta) * info.mid_price;
+      this.p_min = info.alpha / beta / info.price_deviation ** (1 / beta) * info.mid_price;
+    }
+    this.supply = info.lp_shares.issued;
+    if (info.x_asset === 'base') this.base = this.balances.xn;
+    if (info.y_asset === 'base') this.base = this.balances.yn;
     this.ready = true;
   }
 
   hasLiquidity() {
-    return !(!this.reserve0 || !this.reserve1 || !this.supply);
+    return !(!this.balances.x || !this.balances.y || !this.supply);
+  }
+
+  getAmountBoughtAndDelta(inputAmount, inputAsset) {
+    const poolState = getPoolState(this.params, this.stateVars);
+    const swapParams = getSwapParams(inputAmount, inputAsset, poolState);
+    console.log(swapParams);
+    const { res, delta_Yn } = swapParams;
+    return { net_amount_out: res.net_amount_X, delta: delta_Yn };
   }
 
   getAmountBought(inputAmount, inputAsset) {
-    const inputReserve = inputAsset === this.asset0 ? this.reserve0 : this.reserve1;
-    const outputReserve = inputAsset === this.asset1 ? this.reserve0 : this.reserve1;
-    return getAmountBought(inputAmount, inputReserve, outputReserve, this.swapFee);
+    const poolState = getPoolState(this.params, this.stateVars);
+    const swapParams = getSwapParams(inputAmount, inputAsset, poolState);
+    console.log(swapParams);
+    const { res, delta_Yn } = swapParams;
+    return res.net_amount_X;
   }
 
   getAmountSold(outputAmount, outputAsset) {
-    const inputReserve = outputAsset === this.asset1 ? this.reserve0 : this.reserve1;
-    const outputReserve = outputAsset === this.asset0 ? this.reserve0 : this.reserve1;
-    return getAmountSold(outputAmount, outputReserve, inputReserve, this.swapFee);
+    const poolState = getPoolState(this.params, this.stateVars);
+    const swapParams = getSwapParamsByOutput(outputAmount, outputAsset, poolState);
+    console.log(swapParams);
+    const { res, delta_Yn } = swapParams;
+    return res.amount_Y;
+  }
+
+  getLeveragedBuyParams(inputAmount, inputAsset, leverage) {
+    const poolState = getPoolState(this.params, this.stateVars);
+    const { res, delta } = getLeveragedBuyParams(inputAmount, inputAsset, leverage, poolState);
+    return { res, delta };
+  }
+
+  getLeveragedSellParams(inputAmount, asset, leverage, entry_price) {
+    const poolState = getPoolState(this.params, this.stateVars);
+    console.log('pool state', poolState, {inputAmount, asset, leverage, entry_price})
+    const { res, delta } = getLeveragedSellParams(inputAmount, asset, leverage, entry_price, poolState);
+    return { res, delta };
+  }
+
+  getRedemptionAmounts(received_shares_amount, asset) {
+    const poolState = getPoolState(this.params, this.stateVars);
+    const res = getRedemptionResult(received_shares_amount, asset, poolState);
+    console.log(res);
+    return res;
   }
 
   assetValue(value, asset) {
@@ -52,35 +110,35 @@ export default class Pool {
   }
 
   getPrice(assetId, settings) {
-    if (this.reserve0 && this.reserve1) {
+    if (this.balances.x && this.balances.y) {
       const asset = settings.assets[assetId];
       const decimals = asset ? asset.decimals : 0;
-      if (this.asset0 == assetId) {
-        return (this.reserve1 / this.reserve0) * 10 ** decimals;
-      } else if (this.asset1 == assetId) {
-        return (this.reserve0 / this.reserve1) * 10 ** decimals;
+      if (this.x_asset == assetId) {
+        return (this.balances.y / this.balances.x) * 10 ** decimals;
+      } else if (this.y_asset == assetId) {
+        return (this.balances.x / this.balances.y) * 10 ** decimals;
       }
     }
     return 0;
   }
 
   getMarketcap(settings) {
-    let assetValue0 = 0;
-    let assetValue1 = 0;
+    let assetXValue = 0;
+    let assetYValue = 0;
     if (this.base) {
-      assetValue0 = assetValue1 = (settings.exchangeRates.GBYTE_USD / 1e9) * this.base;
+      assetXValue = assetYValue = (settings.exchangeRates.GBYTE_USD / 1e9) * this.base;
     } else {
-      const assetId0 = this.asset0 === 'base' ? 'GBYTE' : this.asset0;
-      const assetId1 = this.asset1 === 'base' ? 'GBYTE' : this.asset1;
-      const asset0 = settings.assets[assetId0];
-      const asset1 = settings.assets[assetId1];
-      assetValue0 = settings.exchangeRates[`${assetId0}_USD`]
-        ? settings.exchangeRates[`${assetId0}_USD`] * this.assetValue(this.reserve0, asset0)
+      const x_asset_id = this.x_asset === 'base' ? 'GBYTE' : this.x_asset;
+      const y_asset_id = this.y_asset === 'base' ? 'GBYTE' : this.y_asset;
+      const x_asset = settings.assets[x_asset_id];
+      const y_asset = settings.assets[y_asset_id];
+      assetXValue = settings.exchangeRates[`${x_asset_id}_USD`]
+        ? settings.exchangeRates[`${x_asset_id}_USD`] * this.assetValue(this.balances.xn, x_asset)
         : 0;
-      assetValue1 = settings.exchangeRates[`${assetId1}_USD`]
-        ? settings.exchangeRates[`${assetId1}_USD`] * this.assetValue(this.reserve1, asset1)
+      assetYValue = settings.exchangeRates[`${y_asset_id}_USD`]
+        ? settings.exchangeRates[`${y_asset_id}_USD`] * this.assetValue(this.balances.yn, y_asset)
         : 0;
     }
-    return assetValue0 && assetValue1 ? assetValue0 + assetValue1 : 0;
+    return assetXValue && assetYValue ? assetXValue + assetYValue : 0;
   }
 }

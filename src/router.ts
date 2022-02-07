@@ -8,6 +8,8 @@ const Mint2 = () => import(/* webpackChunkName: "mint2" */ '@/views/Mint2.vue');
 const Burn = () => import(/* webpackChunkName: "burn" */ '@/views/Burn.vue');
 const Pools = () => import(/* webpackChunkName: "pools" */ '@/views/Pools.vue');
 const Asset = () => import(/* webpackChunkName: "asset" */ '@/views/Asset.vue');
+const BuyLeverage = () => import(/* webpackChunkName: "asset" */ '@/views/BuyLeverage.vue');
+const SellLeverage = () => import(/* webpackChunkName: "asset" */ '@/views/SellLeverage.vue');
 
 Vue.use(Router);
 
@@ -25,6 +27,8 @@ const router = new Router({
     { path: '/add-liquidity/:poolAddress?', name: 'mint1', component: Mint1 },
     { path: '/add-liquidity-2/:poolAddress?', name: 'mint2', component: Mint2 },
     { path: '/remove-liquidity/:poolAddress?', name: 'burn', component: Burn },
+    { path: '/buy-leverage/:poolAddress?', name: 'buy-leverage', component: BuyLeverage },
+    { path: '/sell-leverage/:poolAddress?', name: 'sell-leverage', component: SellLeverage },
     { path: '/pools', name: 'pools', component: Pools },
     { path: '/asset/*', name: 'asset', component: Asset },
     {

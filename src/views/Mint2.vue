@@ -4,7 +4,7 @@
       <PoolNav :default="1" />
       <BoxSelectPool :poolAddress="poolAddress" v-model="selectedPool" />
       <Box
-        v-if="selectedPool.asset0 && selectedPool.reserve0 && selectedPool.reserve1"
+        v-if="selectedPool.x_asset && selectedPool.balances.xn && selectedPool.balances.yn"
         class="d-flex"
       >
         <div class="flex-auto">
@@ -15,13 +15,13 @@
           <InputAmount
             id="input"
             v-model="inputAmount"
-            @change="updateOutputAmount"
+            @change="onUpdatedInputAmount"
             :asset="inputAsset"
           />
         </div>
         <div class="text-right mt-4 ml-4">
           <ButtonSelectToken
-            :values="[selectedPool.asset0, selectedPool.asset1]"
+            :values="[selectedPool.x_asset, selectedPool.y_asset]"
             v-model="inputAsset"
           />
         </div>
@@ -31,25 +31,9 @@
           Add liquidity with both tokens first.
         </p>
       </Box>
-      <Box v-if="rate">
-        <label for="input">Exchange rate</label>
-        <div class="text-white">
-          1 <Ticker :asset="outputAsset" /> =
-          {{ parseFloat(rate.toFixed(this.getDecimals(inputAsset))) }}
-          <Ticker :asset="inputAsset" />
-        </div>
-        <div class="text-white">
-          1 <Ticker :asset="inputAsset" /> =
-          {{ parseFloat((1 / rate).toFixed(this.getDecimals(outputAsset))) }}
-          <Ticker :asset="outputAsset" />
-        </div>
-      </Box>
-      <Box v-if="rate">
+      <Box v-if="inputAsset">
         <p class="text-white m-0">
-          Adding liquidity with just one token is basically the same as swapping half of the tokens,
-          and then automatically adding liquidity with both tokens.<br />
-          There is no slippage threshold when depositing only one token at once, so use with
-          caution!
+          You can add up to {{maxAmountInDisplayUnits}} <Ticker :asset="inputAsset" />, the pool's price won't change.
         </p>
       </Box>
       <div class="text-center">
@@ -66,8 +50,6 @@
 </template>
 
 <script>
-import Trade from '@/helpers/_oswap/trade';
-import Factory from '@/helpers/_oswap/factory';
 import { generateUri, toString } from '@/helpers/_oswap';
 
 export default {
@@ -75,68 +57,67 @@ export default {
     return {
       selectedPool: false,
       trade: false,
+      maxAmount: 0,
       inputAmount: '',
       inputAsset: '',
       poolAddress: this.$route.params.poolAddress,
-      rate: 0
     };
   },
   watch: {
     async inputAmount(value, oldValue) {
       if (value !== oldValue) {
-        this.updateOutputAmount();
       }
     },
     async inputAsset(value, oldValue) {
       if (value !== oldValue) {
-        this.outputAsset =
-          this.inputAsset === this.selectedPool.asset0
-            ? this.selectedPool.asset1
-            : this.selectedPool.asset0;
         await this.init();
-        this.updateOutputAmount();
       }
     },
     async selectedPool(value, oldValue) {
       if (value !== oldValue) {
         this.inputAmount = '';
-        this.rate = 0;
       }
     }
+  },
+  computed: {
+    maxAmountInDisplayUnits: function(){
+      return +toString(this.maxAmount, this.getDecimals(this.inputAsset));
+    },
   },
   methods: {
     selectAmount(amount) {
       this.inputAmount = amount;
-      this.updateOutputAmount();
     },
     getDecimals(assetId) {
       return this.settings.decimals[assetId] || 0;
     },
-    updateRate() {
-      if (!this.inputAsset || !this.outputAsset) {
-        this.rate = 0;
-        return;
-      }
-      const inputAmount = toString(this.inputAmount / 2, this.getDecimals(this.inputAsset));
-      const outputAmount = toString(this.outputAmount, this.getDecimals(this.outputAsset));
-      const rate = parseFloat((inputAmount / outputAmount).toFixed(6));
-      if (rate <= 0 || rate === Infinity) {
-        this.rate = 0;
-        return;
-      }
-      this.rate = rate;
-    },
     async init() {
-      if (!this.inputAsset || !this.outputAsset) return;
-      const settings = this.settings;
-      const factory = new Factory(settings.pools, settings.pairs);
-      this.trade = new Trade(factory, this.inputAsset, this.outputAsset);
-      await this.trade.init();
+      if (!this.inputAsset) return;
+      if (!this.selectedPool) return;
+      const pool = this.selectedPool;
+      const {x_asset, Lambda, balances, stateVars: {profits}} = pool;
+      const assetLabel = this.inputAsset === x_asset ? 'x' : 'y';
+      const oppositeAssetLabel = assetLabel === 'x' ? 'y' : 'x';
+      if (Lambda > 1){
+        const x_leverage = balances.x/balances.xn;
+        const y_leverage = balances.y/balances.yn;
+        const underleveragedAssetLabel = x_leverage < y_leverage ? 'x' : 'y';
+        if (assetLabel === underleveragedAssetLabel){
+          this.maxAmount = 0;
+        }
+        else{
+          const maxOppositeAmount = Math.floor(balances[oppositeAssetLabel+'n'] - balances[oppositeAssetLabel]/Lambda);
+          this.maxAmount = Math.floor(maxOppositeAmount/balances[oppositeAssetLabel+'n'] * balances[assetLabel+'n']);
+        }
+      }
+      else{
+        const profitToProportional = profits[oppositeAssetLabel] / balances[oppositeAssetLabel] * balances[assetLabel] - profits[assetLabel];
+        this.maxAmount = profitToProportional > 0 ? Math.floor(profitToProportional) : 0;
+      }
     },
     handleSubmit() {
-      const data = { mint: '1' };
       const address = this.selectedPool.address;
-      const url = generateUri(address, data, this.inputAmount, this.inputAsset);
+      const url = generateUri(address, null, this.inputAmount, this.inputAsset);
       if (navigator.userAgent.indexOf('Firefox') != -1) {
         const opener = window.open(url, '', 'width=1,height=1,resizable=no');
         setTimeout(function() {
@@ -146,11 +127,8 @@ export default {
         location.href = url;
       }
     },
-    updateOutputAmount() {
-      if (!this.inputAsset || !this.outputAsset) return;
-      if (this.inputAmount)
-        this.outputAmount = this.trade.getAmountBought(this.inputAmount / 2) || '';
-      this.updateRate();
+    onUpdatedInputAmount() {
+      if (!this.inputAsset) return;
     },
   }
 };

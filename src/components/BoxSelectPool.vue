@@ -20,8 +20,8 @@ export default {
   watch: {
     async id(value, oldValue) {
       if (value !== oldValue) {
-        const { asset0, asset1 } = this.settings.pools[value];
-        const pool = new Pool(value, [asset0, asset1]);
+        const { x_asset, y_asset } = this.settings.pools[value];
+        const pool = new Pool(value, [x_asset, y_asset]);
         await pool.init();
         pool.marketcap = pool.getMarketcap(this.settings);
         this.pool = pool;
