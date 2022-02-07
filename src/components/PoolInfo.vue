@@ -50,7 +50,7 @@
           </div>
           <div class="d-block">
             <label>Price range</label>
-            <span class="text-white ml-2" v-text="`${pool.p_min * priceMultiplier} to ${pool.p_max * priceMultiplier}`" />
+            <span class="text-white ml-2" v-text="`${pool.p_min && (pool.p_min * priceMultiplier).toPrecision(6)} to ${(pool.p_max * priceMultiplier).toPrecision(6)}`" />
           </div>
         </div>
       </div>
