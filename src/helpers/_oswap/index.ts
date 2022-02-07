@@ -5,6 +5,8 @@ export const FACTORY_ADDRESS = config.factoryAddress;
 export const BASE_ADDRESS = config.baseAddress;
 export const TOKEN_REGISTRY_ADDRESS = config.tokenRegistryAddress;
 
+let definitions = {};
+let cachedStateVars = {};
 
 export function fromString(str: string, decimals: number = 0) {
   const multiplier = 10 ** decimals;
@@ -21,8 +23,8 @@ export function toString(amount: number, decimals: number = 0) {
 
 export async function getInfo(address) {
   try {
-    let stateVars = await client.requestAsync('light/get_aa_state_vars', { address });
-    const definition = await client.requestAsync('light/get_definition', address);
+    const stateVars = await getAAState(address);
+    const definition = await getAADefinition(address);
     const params = definition[1].params;
     const defaults = { swap_fee: 0.003, exit_fee: 0.005, arb_profit_tax: 0, leverage_profit_tax: 0, leverage_token_tax: 0, mid_price: 0, price_deviation: 0, base_interest_rate: 0.2, pool_leverage: 1, alpha: 0.5, period_length: 3600 };
     const info = { ...defaults, ...params, ...stateVars };
@@ -37,8 +39,17 @@ export async function getInfo(address) {
   }
 }
 
+export async function getAADefinition(address: string) {
+  if (!definitions[address])
+    definitions[address] = await client.requestAsync('light/get_definition', address);
+  return definitions[address];
+}
+
 export async function getAAState(address: string, delimiter?: string) {
+  if (cachedStateVars[address] && cachedStateVars[address].ts > Date.now() - 3000)
+    return cachedStateVars[address].state;
   const state = await client.requestAsync('light/get_aa_state_vars', { address });
+  cachedStateVars[address] = { state, ts: Date.now() };
   return state;
 }
 
