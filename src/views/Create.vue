@@ -294,6 +294,9 @@ export default {
     decimals() {
       return this.settings.decimals;
     },
+    priceMultiplier(){
+      return 10**(this.decimalsA - this.decimalsB);
+    },
     p_max(){
       if (!+this.midPrice || !+this.priceDeviation) return Infinity;
       const beta = 1 - this.alpha;
@@ -320,7 +323,7 @@ export default {
         leverage_profit_tax: this.leverageProfitTax/100,
         leverage_token_tax: this.leverageTokenTax/100,
         base_interest_rate: this.baseInterestRate/100,
-        ...(+this.midPrice && {mid_price: +this.midPrice}),
+        ...(+this.midPrice && {mid_price: +this.midPrice / this.priceMultiplier}), // from display units to pennies
         ...(+this.priceDeviation && {price_deviation: +this.priceDeviation}),
         pool_leverage: +this.poolLeverage,
         alpha: +this.alpha,
