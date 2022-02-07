@@ -131,6 +131,7 @@
           v-model="midPrice"
           type="number"
           min="0"
+          step="0.00000001"
         />
       </Box>
       <Box>
@@ -143,7 +144,9 @@
           v-model="priceDeviation"
           type="number"
           min="0"
+          step="0.00000001"
         />
+        <div v-if="symbolA && symbolB">Price range from {{p_min}} to {{p_max}} {{symbolB}} for 1 {{symbolA}}</div>
       </Box>
       <Box>
         <label for="poolLeverage" class="d-block">Pool leverage</label>
@@ -290,7 +293,17 @@ export default {
     },
     decimals() {
       return this.settings.decimals;
-    }
+    },
+    p_max(){
+      if (!+this.midPrice || !+this.priceDeviation) return Infinity;
+      const beta = 1 - this.alpha;
+      return (this.alpha / beta * this.priceDeviation ** (1 / beta) * this.midPrice).toPrecision(6);
+    },
+    p_min(){
+      if (!+this.midPrice || !+this.priceDeviation) return 0;
+      const beta = 1 - this.alpha;
+      return (this.alpha / beta / this.priceDeviation ** (1 / beta) * this.midPrice).toPrecision(6);
+    },
   },
   created() {
     const assetB = this.$route.params[0] || this.$route.params.pathMatch || '';
