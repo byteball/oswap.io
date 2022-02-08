@@ -33,6 +33,25 @@
             <span class="text-white ml-2" v-text="`${pool.info.base_interest_rate * 100}%`" />
           </div>
           <div class="d-block">
+            <label>Utilization ratio</label>
+            <span class="text-white ml-2" v-text="`${(this.utilizationRatio * 100).toFixed(2)}%`" />
+          </div>
+          <div class="d-block">
+            <label>Actual interest rate</label>
+            <span class="text-white ml-2" v-text="`${(this.actualInterestRate * 100).toFixed(2)}%`" />
+          </div>
+          <div class="d-block">
+            <label>Borrowed amounts</label>
+            <span class="text-white ml-2">
+              <Amount :value="borrowedAmounts.x" :asset="pool.x_asset" /> <Ticker :asset="pool.x_asset" /> +
+              <Amount :value="borrowedAmounts.y" :asset="pool.y_asset" /> <Ticker :asset="pool.y_asset" />
+            </span>
+          </div>
+          <div class="d-block">
+            <label>Return on capital from lending alone</label>
+            <span class="text-white ml-2" v-text="`${(this.borrowedAmounts.borrowed_to_assets * this.actualInterestRate * 100).toFixed(2)}%`" />
+          </div>
+          <div class="d-block">
             <label>Token weights</label>
             <span class="text-white ml-2" v-text="`${pool.info.alpha * 100}% / ${(1 - pool.info.alpha) * 100}%`" />
           </div>
@@ -151,7 +170,16 @@ export default {
     },
     detailsText(){
       return this.details ? "hide details" : "show all details";
-    }
+    },
+    utilizationRatio(){
+      return this.pool.getCurrentUtilizationRatio();
+    },
+    actualInterestRate(){
+      return this.pool.info.base_interest_rate / (1 - this.utilizationRatio);
+    },
+    borrowedAmounts(){
+      return this.pool.getBorrowedAmounts();
+    },
   },
   watch: {
     async pool(value, oldValue) {

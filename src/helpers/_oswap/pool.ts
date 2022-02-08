@@ -1,5 +1,5 @@
 import { getInfo } from './';
-import { getPoolState, getSwapParams, getSwapParamsByOutput, getRedemptionResult, toAsset, getLeveragedBuyParams, getLeveragedSellParams, setLogger } from 'oswap-v2-sdk';
+import { getPoolState, getSwapParams, getSwapParamsByOutput, getRedemptionResult, toAsset, getLeveragedBuyParams, getLeveragedSellParams, getCurrentUtilizationRatio, setLogger } from 'oswap-v2-sdk';
 
 type Balance = {
   x: number;
@@ -104,19 +104,50 @@ export default class Pool {
     return res;
   }
 
+  getCurrentUtilizationRatio() {
+    const poolState = getPoolState(this.params, this.stateVars);
+    return getCurrentUtilizationRatio(poolState);
+  }
+
+  getBorrowedAmounts() {
+    const res = { x: 0, y: 0, borrowed_to_assets: 0 };
+    const poolState = getPoolState(this.params, this.stateVars);
+    const { balances, leveraged_balances, profits, shifts: { x0, y0 }, pool_props: { alpha, beta } } = poolState;
+    const px = alpha / beta * (balances.y + y0) / (balances.x + x0);
+    for (let leverageKey in leveraged_balances) {
+      const bal = leveraged_balances[leverageKey].balance;
+      const signedL = parseFloat(leverageKey); // '-2x' => -2
+      const L = Math.abs(signedL);
+      if (signedL > 0)
+        res.y += (L - 1) / L * bal * px;
+      else
+        res.x += (L - 1) / L * bal / px;
+    }
+    if (res.x || res.y) {
+      const borrowed_in_y = res.y + px * res.x;
+      const assets_in_y = balances.yn + profits.y + px * (balances.xn + profits.x);
+      res.borrowed_to_assets = borrowed_in_y / assets_in_y;
+    }
+    return res;
+  }
+
   assetValue(value, asset) {
     const decimals = asset ? asset.decimals : 0;
     return value / 10 ** decimals;
   }
 
   getPrice(assetId, settings) {
-    if (this.balances.x && this.balances.y) {
+    // @ts-ignore
+    if (this.balances.x && this.balances.y || this.info.mid_price) {
+      const poolState = getPoolState(this.params, this.stateVars);
+      const { balances, shifts: { x0, y0 }, pool_props: { alpha, beta } } = poolState;
       const asset = settings.assets[assetId];
       const decimals = asset ? asset.decimals : 0;
+      const px = alpha / beta * (balances.y + y0) / (balances.x + x0);
       if (this.x_asset == assetId) {
-        return (this.balances.y / this.balances.x) * 10 ** decimals;
+        return px * 10 ** decimals;
       } else if (this.y_asset == assetId) {
-        return (this.balances.x / this.balances.y) * 10 ** decimals;
+        return 1 / px * 10 ** decimals;
       }
     }
     return 0;
