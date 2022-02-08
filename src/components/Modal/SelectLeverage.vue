@@ -10,7 +10,7 @@
         v-for="leverage in leverages"
         :key="leverage"
       >
-        {{leverage}}
+        {{leverage}}x
       </a>
     </div>
   </Modal>

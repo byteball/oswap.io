@@ -1,7 +1,7 @@
 <template>
   <span>
     <a :class="customClass || 'btn-mktg'" @click="modalOpen = true">
-      <span v-if="input">{{input}}</span>
+      <span v-if="input">{{input}}x</span>
       <template v-else>Select<span class="hide-sm"> leverage</span></template>
     </a>
     <ModalSelectLeverage :open="modalOpen" @close="modalOpen = false" @leverage="input = $event" />
