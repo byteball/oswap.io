@@ -90,7 +90,7 @@ export default {
     },
     updateAmountX() {
       const pool = this.selectedPool;
-      if (!this.amount_x || !pool || !pool.hasLiquidity() && !pool.info.mid_price) return;
+      if (!this.amount_y || !pool || !pool.hasLiquidity() && !pool.info.mid_price) return;
       const k = !pool.hasLiquidity() && pool.info.mid_price
         ? 1/pool.info.mid_price * (1-pool.info.alpha) / pool.info.alpha
         : pool.balances.xn / pool.balances.yn;
