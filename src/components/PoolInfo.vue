@@ -61,7 +61,7 @@
           </div>
           <div class="d-block" v-if="pool.info.mid_price">
             <label>Mid-price</label>
-            <span class="text-white ml-2" v-text="`${pool.info.mid_price}`" />
+            <span class="text-white ml-2" v-text="`${pool.info.mid_price * priceMultiplier}`" />
           </div>
           <div class="d-block" v-if="pool.info.mid_price">
             <label>Price deviation</label>
