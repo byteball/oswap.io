@@ -27,7 +27,7 @@ export default {
     value(value) {
       if (value === '') {
         this.input = '';
-      } else {
+      } else if (value !== fromString(this.input, this.decimals)) {
         this.input = toString(value, this.decimals);
       }
     },
