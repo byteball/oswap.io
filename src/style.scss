@@ -93,13 +93,18 @@ label {
 .input-amount {
   box-shadow: none !important;
   background: transparent;
-  font-size: 42px;
+  font-size: 34px;
+  line-height: 42px;
   color: white;
   width: 100%;
+  font-family: 'Inter', Arial;
+  font-weight: 500;
+  margin-top: -3px;
+  margin-bottom: 11px;
 
   &:focus, &:hover, &:active {
     outline: none;
-    box-shadow: none  !important;
+    box-shadow: none !important;
   }
 }
 
@@ -210,5 +215,27 @@ a.btn-submit.disabled {
 .highlight {
   &:hover {
     background-color: $gray-800;
+  }
+}
+
+
+.bounce-box {
+  .text-white {
+    padding: 8px;
+
+    cursor: pointer;
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+
+    input {
+      display: table-cell;
+      vertical-align: middle;
+    }
   }
 }
