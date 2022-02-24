@@ -156,20 +156,16 @@ export default class Pool {
   getMarketcap(settings) {
     let assetXValue = 0;
     let assetYValue = 0;
-    if (this.base) {
-      assetXValue = assetYValue = (settings.exchangeRates.GBYTE_USD / 1e9) * this.base;
-    } else {
-      const x_asset_id = this.x_asset === 'base' ? 'GBYTE' : this.x_asset;
-      const y_asset_id = this.y_asset === 'base' ? 'GBYTE' : this.y_asset;
-      const x_asset = settings.assets[x_asset_id];
-      const y_asset = settings.assets[y_asset_id];
-      assetXValue = settings.exchangeRates[`${x_asset_id}_USD`]
-        ? settings.exchangeRates[`${x_asset_id}_USD`] * this.assetValue(this.balances.xn, x_asset)
-        : 0;
-      assetYValue = settings.exchangeRates[`${y_asset_id}_USD`]
-        ? settings.exchangeRates[`${y_asset_id}_USD`] * this.assetValue(this.balances.yn, y_asset)
-        : 0;
-    }
+    const x_asset_id = this.x_asset === 'base' ? 'GBYTE' : this.x_asset;
+    const y_asset_id = this.y_asset === 'base' ? 'GBYTE' : this.y_asset;
+    const x_asset = settings.assets[this.x_asset];
+    const y_asset = settings.assets[this.y_asset];
+    assetXValue = settings.exchangeRates[`${x_asset_id}_USD`]
+      ? settings.exchangeRates[`${x_asset_id}_USD`] * this.assetValue(this.balances.xn, x_asset)
+      : 0;
+    assetYValue = settings.exchangeRates[`${y_asset_id}_USD`]
+      ? settings.exchangeRates[`${y_asset_id}_USD`] * this.assetValue(this.balances.yn, y_asset)
+      : 0;
     return assetXValue && assetYValue ? assetXValue + assetYValue : 0;
   }
 }
