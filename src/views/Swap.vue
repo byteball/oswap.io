@@ -159,7 +159,7 @@ export default {
         this.rate = 0;
         return;
       }
-      const inputAmount = toString(this.inputAmount, this.getDecimals(this.inputAsset));
+      const inputAmount = toString(this.inputAmount * this.share, this.getDecimals(this.inputAsset));
       const outputAmount = toString(this.outputAmount, this.getDecimals(this.outputAsset));
       const rate = parseFloat((inputAmount / outputAmount).toPrecision(6));
       if (rate <= 0 || rate === Infinity) {
