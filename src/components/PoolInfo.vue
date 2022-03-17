@@ -142,6 +142,13 @@
         {{ share }}%
       </span>
     </div>
+    <div v-if="apy">
+      <label class="d-block">APY</label>
+      <a :href="_statsLink(pool.address)" target="_blank" title="Go to stats website">
+        {{ apy }}%
+        <Icon name="external-link" class="ml-1" size="18" />
+      </a>
+    </div>
   </div>
 </template>
 
@@ -180,6 +187,11 @@ export default {
     borrowedAmounts(){
       return this.pool.getBorrowedAmounts();
     },
+    apy(){
+      if (this.settings.apy7d && this.settings.apy7d[this.pool.address])
+        return this.settings.apy7d[this.pool.address].apy;
+      return null;
+    }
   },
   watch: {
     async pool(value, oldValue) {

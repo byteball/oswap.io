@@ -25,3 +25,7 @@ export function explorerLink(str: string) {
     ? `https://testnetexplorer.obyte.org/#${str}`
     : `https://digitalnerds.github.io/obyte-address-assets/#/${str}`;
 }
+
+export function statsLink(address: string) {
+  return `${config.statsUrl}/pool/${address}`;
+}

@@ -1,6 +1,6 @@
 import store from '@/store';
 import { mapState } from 'vuex';
-import { explorerLink } from '@/helpers/utils';
+import { explorerLink, statsLink } from '@/helpers/utils';
 
 // @ts-ignore
 const modules = Object.entries(store.state).map(module => module[0]);
@@ -12,6 +12,9 @@ export default {
   methods: {
     _explorerLink(str: string): string {
       return explorerLink(str);
+    },
+    _statsLink(address: string): string {
+      return statsLink(address);
     }
   }
 };

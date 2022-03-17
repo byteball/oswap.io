@@ -9,6 +9,7 @@ import {
 } from '@/helpers/_oswap';
 import { LOCALSTORAGE_KEY } from '@/helpers/utils';
 import units from '@/helpers/units.json';
+import getAPY7d from '@/helpers/stats';
 
 const state = {
   isLoading: false,
@@ -19,6 +20,7 @@ const state = {
   exchangeRates: {},
   pools: {},
   pairs: {},
+  apy7d: {},
   count: 0
 };
 
@@ -65,7 +67,10 @@ const mutations = {
   },
   exchangeRates(_state, payload) {
     Vue.set(_state, 'exchangeRates', payload);
-  }
+  },
+  apy7d(_state, payload) {
+    Vue.set(_state, 'apy7d', payload);
+  },
 };
 
 const actions = {
@@ -100,6 +105,8 @@ const actions = {
     const decimalsRegistry = await getAAStateVars(TOKEN_REGISTRY_ADDRESS, 'decimals_', '_');
     commit('init', { factory, a2sRegistry, s2aRegistry, descriptionRegistry, decimalsRegistry });
     commit('isLoading', false);
+    const apy7d = await getAPY7d();
+    commit('apy7d', apy7d);
   },
   unit: ({ commit }, unit) => {
     localStorage.setItem(`${LOCALSTORAGE_KEY}.unit`, JSON.stringify(unit));

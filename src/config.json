@@ -2,6 +2,8 @@
   "testnet": {
     "network": "testnet",
     "explorer": "https://testnetexplorer.obyte.org",
+    "statsApiUrl": "https://v2-data.oswap.io",
+    "statsUrl": "https://v2-stats.oswap.io",
     "testnet": true,
     "uri": "obyte-tn",
     "node": "obyte.org/bb-test",
@@ -13,6 +15,8 @@
   "livenet": {
     "network": "livenet",
     "explorer": "https://explorer.obyte.org",
+    "statsApiUrl": "https://v2-data.oswap.io",
+    "statsUrl": "https://v2-stats.oswap.io",
     "testnet": false,
     "uri": "obyte",
     "node": "obyte.org/bb",
