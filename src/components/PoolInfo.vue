@@ -71,6 +71,11 @@
             <label>Price range</label>
             <span class="text-white ml-2" v-text="`${pool.p_min && (pool.p_min * priceMultiplier).toPrecision(6)} to ${(pool.p_max * priceMultiplier).toPrecision(6)}`" />
           </div>
+          <div class="d-block">
+            <label>LP shares symbol</label>
+            <span v-if="sharesSymbol" class="text-white ml-2" v-text="sharesSymbol" />
+            <a v-else :href="registerSymbolHref" class="text-white ml-2">Register symbol {{proposedSharesSymbol}}</a>
+          </div>
         </div>
       </div>
       <!--div>
@@ -153,7 +158,7 @@
 </template>
 
 <script>
-import { getBalance } from '@/helpers/_oswap';
+import { generateUri, getBalance, TOKEN_REGISTRY_ADDRESS } from '@/helpers/_oswap';
 
 export default {
   props: ['pool'],
@@ -191,7 +196,30 @@ export default {
       if (this.settings.apy7d && this.settings.apy7d[this.pool.address])
         return this.settings.apy7d[this.pool.address].apy;
       return null;
-    }
+    },
+    sharesSymbol(){
+      return this.settings.assetToSymbol[this.pool.asset];
+    },
+    poolName(){
+      const x_asset = this.settings.assets[this.pool.x_asset];
+      const y_asset = this.settings.assets[this.pool.y_asset];
+      const x_symbol = x_asset.symbol || this.pool.x_asset.slice(0, 4);
+      const y_symbol = y_asset.symbol || this.pool.y_asset.slice(0, 4);
+      return `${x_symbol}-${y_symbol}`;
+    },
+    proposedSharesSymbol(){
+      const symbol = `O-${this.poolName}`;
+      if (!this.settings.symbolToAsset[symbol])
+        return symbol;
+      for (let i=2; true; i++){
+        const symboln = `${symbol}-${i}`;
+        if (!this.settings.symbolToAsset[symboln])
+          return symboln;
+      }
+    },
+    registerSymbolHref(){
+      return generateUri(TOKEN_REGISTRY_ADDRESS, {asset: this.pool.asset, symbol: this.proposedSharesSymbol, decimals: 0, description: `Oswap v2 LP shares for ${this.poolName}`}, 0.1e9);
+    },
   },
   watch: {
     async pool(value, oldValue) {
