@@ -1,7 +1,7 @@
 import client from '@/helpers/client';
 import config from '@/helpers/config';
 
-export const FACTORY_ADDRESS = config.factoryAddress;
+export const FACTORY_ADDRESSES = config.factoryAddresses;
 export const BASE_ADDRESS = config.baseAddress;
 export const TOKEN_REGISTRY_ADDRESS = config.tokenRegistryAddress;
 
@@ -51,6 +51,14 @@ export async function getAAState(address: string, delimiter?: string) {
   const state = await client.requestAsync('light/get_aa_state_vars', { address });
   cachedStateVars[address] = { state, ts: Date.now() };
   return state;
+}
+
+export async function getAAStates(addresses: string[]) {
+  let states = {};
+  const arrStates = await Promise.all(addresses.map(address => getAAState(address)));
+  for (let i = 0; i < addresses.length; i++)
+    states[addresses[i]] = arrStates[i];
+  return states;
 }
 
 export async function getAAStateVars(address: string, var_prefix: string, delimiter?: string) {

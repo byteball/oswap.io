@@ -2,9 +2,9 @@ import Vue from 'vue';
 import store from '@/store';
 import client from '@/helpers/client';
 import {
-  getAAState,
+  getAAStates,
   getAAStateVars,
-  FACTORY_ADDRESS,
+  FACTORY_ADDRESSES,
   TOKEN_REGISTRY_ADDRESS
 } from '@/helpers/_oswap';
 import { LOCALSTORAGE_KEY } from '@/helpers/utils';
@@ -78,19 +78,23 @@ const actions = {
     commit('isLoading', true);
     const address = localStorage.getItem(`${LOCALSTORAGE_KEY}.address`);
     if (address) store.dispatch('login', address);
-    const factoryVars = await getAAState(FACTORY_ADDRESS);
+    const factoryVarsByFactory = await getAAStates(FACTORY_ADDRESSES);
     let factory = { pools: {}, pairs: {} };
-    for (let var_name in factoryVars) {
-      const aa = var_name.replace('pool_', '');
-      const pool = factoryVars[var_name];
-      pool.asset = pool.pool_asset;
-      factory.pools[aa] = pool;
-      const { x_asset, y_asset } = pool;
-      const pair = (x_asset < y_asset) ? (x_asset + '_' + y_asset) : (y_asset + '_' + x_asset);
-      if (!factory.pairs[pair])
-        factory.pairs[pair] = { pools: [], i: 0 };
-      factory.pairs[pair].pools.push(aa);
-      factory.pairs[pair].i++;
+    for (let factoryAddress in factoryVarsByFactory) {
+      const factoryVars = factoryVarsByFactory[factoryAddress];
+      for (let var_name in factoryVars) {
+        const aa = var_name.replace('pool_', '');
+        const pool = factoryVars[var_name];
+        pool.asset = pool.pool_asset;
+        pool.factoryAddress = factoryAddress;
+        factory.pools[aa] = pool;
+        const { x_asset, y_asset } = pool;
+        const pair = (x_asset < y_asset) ? (x_asset + '_' + y_asset) : (y_asset + '_' + x_asset);
+        if (!factory.pairs[pair])
+          factory.pairs[pair] = { pools: [], i: 0 };
+        factory.pairs[pair].pools.push(aa);
+        factory.pairs[pair].i++;
+      }
     }
     const a2sRegistryVars = await getAAStateVars(TOKEN_REGISTRY_ADDRESS, 'a2s_', '_');
     let a2sRegistry = {};

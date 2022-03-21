@@ -212,7 +212,7 @@
 
 <script>
 import { b64UriDec } from '@/helpers/utils';
-import { generateUri, FACTORY_ADDRESS } from '@/helpers/_oswap';
+import { generateUri, FACTORY_ADDRESSES } from '@/helpers/_oswap';
 
 const linear_bonding_curve = 'IXBHF6T4IKMYAFGRM54F5FVMXGKCTFNT';
 
@@ -330,7 +330,7 @@ export default {
         period_length: +this.periodLength,
         ...(this.shares_bonding_curve && this.shares_bonding_curve !== linear_bonding_curve && {shares_bonding_curve: this.shares_bonding_curve}),
       };
-      const url = generateUri(FACTORY_ADDRESS, data);
+      const url = generateUri(FACTORY_ADDRESSES[0], data);
       if (navigator.userAgent.indexOf('Firefox') != -1) {
         const opener = window.open(url, '', 'width=1,height=1,resizable=no');
         setTimeout(function() {

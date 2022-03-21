@@ -60,7 +60,7 @@
 <script>
 import pkg from '@/../package.json';
 import {
-  FACTORY_ADDRESS,
+  FACTORY_ADDRESSES,
   BASE_ADDRESS,
   TOKEN_REGISTRY_ADDRESS
 } from '@/helpers/_oswap';
@@ -71,7 +71,7 @@ export default {
   data() {
     return {
       pkg,
-      factory: { name: 'Factory address', addresses: [FACTORY_ADDRESS] },
+      factory: { name: 'Factory address', addresses: FACTORY_ADDRESSES },
       pool: { name: 'Pool base address', addresses: [BASE_ADDRESS] },
       registry: { name: 'Registry address', addresses: [TOKEN_REGISTRY_ADDRESS] },
       config
