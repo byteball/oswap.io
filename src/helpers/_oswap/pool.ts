@@ -57,7 +57,7 @@ export default class Pool {
   }
 
   hasLiquidity() {
-    return !(!this.balances.x || !this.balances.y || !this.supply);
+    return this.balances.xn || this.balances.yn;
   }
 
   getAmountBoughtAndDelta(inputAmount, inputAsset) {
@@ -105,12 +105,16 @@ export default class Pool {
   }
 
   getCurrentUtilizationRatio() {
+    if (!this.hasLiquidity())
+      return 0;
     const poolState = getPoolState(this.params, this.stateVars);
     return getCurrentUtilizationRatio(poolState);
   }
 
   getBorrowedAmounts() {
     const res = { x: 0, y: 0, borrowed_to_assets: 0 };
+    if (!this.hasLiquidity())
+      return res;
     const poolState = getPoolState(this.params, this.stateVars);
     const { balances, leveraged_balances, profits, shifts: { x0, y0 }, pool_props: { alpha, beta } } = poolState;
     const px = alpha / beta * (balances.y + y0) / (balances.x + x0);
