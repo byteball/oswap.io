@@ -29,3 +29,7 @@ export function explorerLink(str: string) {
 export function statsLink(address: string) {
   return `${config.statsUrl}/pool/${address}`;
 }
+
+export function governanceLink(address: string) {
+  return `${config.governanceUrl}/${address}`;
+}

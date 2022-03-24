@@ -76,6 +76,12 @@
             <span v-if="sharesSymbol" class="text-white ml-2" v-text="sharesSymbol" />
             <a v-else :href="registerSymbolHref" class="text-white ml-2">Register symbol {{proposedSharesSymbol}}</a>
           </div>
+          <div class="d-block">
+            <a :href="_governanceLink(pool.address)" target="_blank" title="Go to governance website">
+              Change these parameters in governance
+              <Icon name="external-link" class="ml-1" size="18" />
+            </a>
+          </div>
         </div>
       </div>
       <!--div>
