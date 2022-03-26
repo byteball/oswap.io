@@ -38,6 +38,8 @@ const mutations = {
   init(_state, { factory, a2sRegistry, s2aRegistry, descriptionRegistry, decimalsRegistry }) {
     const lSUnit = localStorage.getItem(`${LOCALSTORAGE_KEY}.unit`);
     const assets = { base: lSUnit ? JSON.parse(lSUnit) : units[0] };
+    a2sRegistry.base = assets.base.symbol;
+    s2aRegistry[assets.base.symbol] = 'base';
     Vue.set(_state, 'assetToSymbol', a2sRegistry);
     Vue.set(_state, 'symbolToAsset', s2aRegistry);
     const decimals = { base: assets.base.decimals };

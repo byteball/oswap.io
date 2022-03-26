@@ -248,7 +248,7 @@ export default {
         this.assetA = false;
         this.symbolA = false;
         this.decimalsA = 0;
-        if (value.length === 44){
+        if (value.length === 44 || value === 'base'){
           this.assetA = value;
           if (this.assetToSymbol[value]) {
             this.symbolA = this.assetToSymbol[value];
@@ -268,7 +268,7 @@ export default {
         this.assetB = false;
         this.symbolB = false;
         this.decimalsB = 0;
-        if (value.length === 44){
+        if (value.length === 44 || value === 'base'){
           this.assetB = value;
           if (this.assetToSymbol[value]) {
             this.symbolB = this.assetToSymbol[value];
