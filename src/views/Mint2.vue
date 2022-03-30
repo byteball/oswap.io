@@ -36,11 +36,16 @@
           You can add up to {{maxAmountInDisplayUnits}} <Ticker :asset="inputAsset" />, the pool's price won't change.
         </p>
       </Box>
+      <Box v-if="isOldFactory">
+        <p class="m-0">
+          This is a buggy pool, adding liquidity is disabled.
+        </p>
+      </Box>
       <div class="text-center">
         <button
           class="btn-submit px-6 rounded-2 mb-3"
           type="submit"
-          :disabled="!inputAsset || !inputAmount"
+          :disabled="!inputAsset || !inputAmount || isOldFactory"
         >
           Add liquidity
         </button>
@@ -51,6 +56,9 @@
 
 <script>
 import { generateUri, toString } from '@/helpers/_oswap';
+import config from '@/helpers/config';
+
+export const FACTORY_ADDRESSES = config.factoryAddresses;
 
 export default {
   data() {
@@ -82,6 +90,9 @@ export default {
   computed: {
     maxAmountInDisplayUnits: function(){
       return +toString(this.maxAmount, this.getDecimals(this.inputAsset));
+    },
+    isOldFactory(){
+      return this.selectedPool && this.settings.pools[this.selectedPool.address].factoryAddress !== FACTORY_ADDRESSES[0];
     },
   },
   methods: {

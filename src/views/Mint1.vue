@@ -42,12 +42,17 @@
             </router-link>
           </div>
         </Box>
+        <Box v-if="isOldFactory">
+          <p class="m-0">
+            This is a buggy pool, adding liquidity is disabled.
+          </p>
+        </Box>
       </template>
       <div class="text-center">
         <button
           class="btn-submit px-6 rounded-2 mb-3"
           type="submit"
-          :disabled="!selectedPool || !amount_x || !amount_y"
+          :disabled="!selectedPool || !amount_x || !amount_y || isOldFactory"
         >
           Add liquidity
         </button>
@@ -61,6 +66,9 @@ import { randomBytes } from 'crypto';
 import texto from '@/helpers/texto';
 import { generatePaymentMessage } from '@/helpers/_oswap';
 import { shorten } from '@/helpers/utils';
+import config from '@/helpers/config';
+
+export const FACTORY_ADDRESSES = config.factoryAddresses;
 
 export default {
   data() {
@@ -70,6 +78,11 @@ export default {
       amount_y: '',
       poolAddress: this.$route.params.poolAddress
     };
+  },
+  computed: {
+    isOldFactory(){
+      return this.selectedPool && this.settings.pools[this.selectedPool.address].factoryAddress !== FACTORY_ADDRESSES[0];
+    },
   },
   watch: {
     async selectedPool(value, oldValue) {
