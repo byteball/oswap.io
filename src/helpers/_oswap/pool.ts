@@ -68,6 +68,7 @@ export default class Pool {
     return { net_amount_out: res.net_amount_X, delta: delta_Yn };
   }
 
+  /*
   getAmountBought(inputAmount, inputAsset) {
     const poolState = getPoolState(this.params, this.stateVars);
     const swapParams = getSwapParams(inputAmount, inputAsset, poolState);
@@ -75,6 +76,7 @@ export default class Pool {
     const { res, delta_Yn } = swapParams;
     return res.net_amount_X;
   }
+  */
 
   getAmountSold(outputAmount, outputAsset) {
     const poolState = getPoolState(this.params, this.stateVars);

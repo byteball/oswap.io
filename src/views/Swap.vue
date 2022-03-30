@@ -228,15 +228,15 @@ export default {
     updateOutputAmount() {
       if (!this.inputAsset || !this.outputAsset) return;
       if (this.inputAmount) {
-        try {
-          const {net_amount_out, data, route} = this.trade.getAmountBoughtAndData(this.inputAmount, this.share);
+        const {net_amount_out, data, route} = this.trade.getAmountBoughtAndData(this.inputAmount, this.share);
+        if (route) {
           this.outputAmount = net_amount_out || '';
           this.multiHop = !!data.hops;
           this.tooMuch = false;
           this.updateRate();
         }
-        catch(e){
-          console.log('getAmountBoughtAndData failed', e)
+        else {
+          console.log('no suitable route found');
           this.tooMuch = true;
           this.rate = null;
         }
@@ -245,13 +245,14 @@ export default {
     updateInputAmount() {
       if (!this.inputAsset || !this.outputAsset) return;
       if (this.outputAmount){
-        try{
-          this.inputAmount = this.trade.getAmountSold(this.outputAmount, this.share) || '';
+        const inputAmount = this.trade.getAmountSold(this.outputAmount, this.share) || '';
+        if (inputAmount) {
+          this.inputAmount = inputAmount;
           this.tooMuch = false;
           this.updateRate();
         }
-        catch(e){
-          console.log('getAmountSold failed', e)
+        else {
+          console.log('no suitable route found');
           this.tooMuch = true;
           this.rate = null;
         }

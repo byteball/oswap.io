@@ -45,6 +45,7 @@ export default class Route {
     return { net_amount_out: inputAmount, data };
   }
 
+  /*
   getAmountBought(inputAmount, inputAsset, share = 1) {
     let i = 0;
     while (this.pools[i]) {
@@ -55,6 +56,7 @@ export default class Route {
     }
     return inputAmount;
   }
+  */
 
   getAmountSold(outputAmount, outputAsset, share = 1) {
     let i = this.pools.length - 1;

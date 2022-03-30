@@ -14,6 +14,7 @@ export default class Trade {
     this.outputAsset = outputAsset;
   }
 
+  /*
   getRoute(inputAmount, share = 1) {
     let bestRoute: any;
     let maxAmount = 0;
@@ -28,6 +29,7 @@ export default class Trade {
     });
     return bestRoute;
   }
+  */
 
   // share: what share of inputAmount should be used to buy. The rest is a safety margin in case the prices change due to interest or other trades
   getAmountBoughtAndData(inputAmount, share = 1) {
@@ -36,17 +38,23 @@ export default class Trade {
     let bestRouteData;
     // @ts-ignore
     this.routes.forEach((route, i) => {
-      // @ts-ignore
-      const { net_amount_out, data } = route.getAmountBoughtAndData(inputAmount, this.inputAsset, share);
-      if (net_amount_out > maxAmount) {
-        maxAmount = net_amount_out;
-        bestRouteData = data;
-        bestRoute = route;
+      try {
+        // @ts-ignore
+        const { net_amount_out, data } = route.getAmountBoughtAndData(inputAmount, this.inputAsset, share);
+        if (net_amount_out > maxAmount) {
+          maxAmount = net_amount_out;
+          bestRouteData = data;
+          bestRoute = route;
+        }
+      }
+      catch (e) {
+        console.log('getAmountBoughtAndData failed', e);
       }
     });
     return { net_amount_out: maxAmount, data: bestRouteData, route: bestRoute };
   }
 
+  /*
   getAmountBought(inputAmount, share = 1) {
     let maxAmount = 0;
     // @ts-ignore
@@ -57,15 +65,21 @@ export default class Trade {
     });
     return maxAmount;
   }
+  */
 
   getAmountSold(outputAmount, share = 1) {
     let minAmount = 0;
     // @ts-ignore
     this.routes.forEach((route, i) => {
-      // @ts-ignore
-      const inputAmount = route.getAmountSold(outputAmount, this.outputAsset, share);
-      if (inputAmount > 0) {
-        if (!minAmount || inputAmount < minAmount) minAmount = inputAmount;
+      try {
+        // @ts-ignore
+        const inputAmount = route.getAmountSold(outputAmount, this.outputAsset, share);
+        if (inputAmount > 0) {
+          if (!minAmount || inputAmount < minAmount) minAmount = inputAmount;
+        }
+      }
+      catch (e) {
+        console.log('getAmountSold failed', e);
       }
     });
     return minAmount;
