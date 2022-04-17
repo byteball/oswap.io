@@ -62,12 +62,10 @@ export default {
     this.pools = pools
       .map(pool => {
         pool.marketcap = pool.getMarketcap(this.settings);
+        pool.old = this.settings.pools[pool.address].old;
         return pool;
       })
-      .sort((a, b) => (a.marketcap == b.marketcap ? 0 : a.marketcap > b.marketcap ? -1 : 1))
-      .sort((a, b) =>
-        a.hasLiquidity() == b.hasLiquidity() ? 0 : a.hasLiquidity() > b.hasLiquidity() ? -1 : 1
-      );
+      .sort((a, b) => a.old === b.old ? (a.marketcap == b.marketcap ? 0 : a.marketcap > b.marketcap ? -1 : 1) : (b.old ? -1 : 1))
   },
   computed: {
     symbol() {

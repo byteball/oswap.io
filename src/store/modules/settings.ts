@@ -89,6 +89,7 @@ const actions = {
         const pool = factoryVars[var_name];
         pool.asset = pool.pool_asset;
         pool.factoryAddress = factoryAddress;
+        pool.old = factoryAddress !== FACTORY_ADDRESSES[0];
         factory.pools[aa] = pool;
         const { x_asset, y_asset } = pool;
         const pair = (x_asset < y_asset) ? (x_asset + '_' + y_asset) : (y_asset + '_' + x_asset);
