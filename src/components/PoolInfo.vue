@@ -141,7 +141,7 @@
         <Amount :value="pool.balances.yn" :asset="pool.y_asset" /> <Ticker :asset="pool.y_asset" />
         <span
           v-if="pool.hasLiquidity() && pool.marketcap"
-          v-text="` ≈ $ ${pool.marketcap.toFixed(2)}`"
+          v-text="` ≈ $${pool.marketcap.toFixed(2)}`"
         />
         <Icon name="external-link" class="ml-1" size="18" />
       </a>
