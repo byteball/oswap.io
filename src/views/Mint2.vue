@@ -117,8 +117,8 @@ export default {
           this.maxAmount = 0;
         }
         else{
-          const maxOppositeAmount = Math.floor(balances[oppositeAssetLabel+'n'] - balances[oppositeAssetLabel]/Lambda);
-          this.maxAmount = Math.floor(maxOppositeAmount/balances[oppositeAssetLabel+'n'] * balances[assetLabel+'n']);
+          const maxOppositeAmount = Math.floor(balances[oppositeAssetLabel+'n'] * Lambda - balances[oppositeAssetLabel]);
+          this.maxAmount = Math.floor(maxOppositeAmount/balances[oppositeAssetLabel] * balances[assetLabel+'n']);
         }
       }
       else{
