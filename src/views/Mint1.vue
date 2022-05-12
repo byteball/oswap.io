@@ -138,6 +138,9 @@ export default {
         if (msg.body.pairing_secret === requestId) msg.reply(message);
       });
       const url = `${this.auth.invite}#${requestId}`;
+
+      this.track();
+
       if (navigator.userAgent.indexOf('Firefox') != -1) {
         const opener = window.open(url, '', 'width=1,height=1,resizable=no');
         setTimeout(function() {
@@ -146,6 +149,13 @@ export default {
       } else {
         location.href = url;
       }
+    },
+    track() {
+      this.$gtag.event('adding liquidity', {
+        event_category: 'liquidity page',
+        event_label: 'assets',
+        value: `${this.selectedPool.x_asset}_${this.selectedPool.y_asset}`
+      });
     }
   }
 };
