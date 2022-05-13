@@ -8,6 +8,7 @@ import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
 import mixins from '@/mixins';
+import config from '@/helpers/config';
 import { shorten } from '@/helpers/utils';
 import messages from '@/helpers/messages.json';
 import numberFormats from '@/helpers/number.json';
@@ -20,7 +21,7 @@ const i18n = new VueI18n({ locale: 'en', messages, numberFormats });
 Vue.use(
   VueGtag,
   {
-    config: { id: 'G-7SVYGTVE9Z' }
+    config: { id: config.gtag_id }
   },
   router
 );

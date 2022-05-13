@@ -141,6 +141,9 @@ export default {
     handleSubmit() {
       const data = this.preferredAsset ? {preferred_asset: this.preferredAsset} : null;
       const url = generateUri(this.selectedPool, data, this.inputAmount, this.asset);
+
+      this.track();
+
       if (navigator.userAgent.indexOf('Firefox') != -1) {
         const opener = window.open(url, '', 'width=1,height=1,resizable=no');
         setTimeout(function() {
@@ -149,6 +152,13 @@ export default {
       } else {
         location.href = url;
       }
+    },
+    track() {
+      this.$gtag.event('removing liquidity', {
+        event_category: 'liquidity page',
+        event_label: this.selectedPool,
+        value: `${this.asset}`
+      });
     }
   }
 };

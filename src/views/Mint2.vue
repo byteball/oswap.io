@@ -127,7 +127,6 @@ export default {
       }
     },
     handleSubmit() {
-      console.error('MIIIIIIIIIIIIIIIIINT2');
       const address = this.selectedPool.address;
       const url = generateUri(address, null, this.inputAmount, this.inputAsset);
 
@@ -148,7 +147,7 @@ export default {
     track() {
       this.$gtag.event('adding liquidity (one token)', {
         event_category: 'liquidity page',
-        event_label: 'asset',
+        event_label: this.selectedPool.address,
         value: `${this.inputAsset}`
       });
     }
