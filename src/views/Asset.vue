@@ -28,7 +28,7 @@
     <Box v-for="(pool, i) in pools" :key="i">
       <label class="d-block">Pool</label>
       <router-link class="d-block" :to="{ name: 'mint1', params: { poolAddress: pool.address } }">
-        <Ticker class="h2" :asset="`${pool.x_asset}_${pool.y_asset}`" />
+        <Ticker class="h2" :asset="`${pool.x_asset}_${pool.y_asset}`" :showIcon="true" />
       </router-link>
       <PoolInfo :pool="pool" />
     </Box>

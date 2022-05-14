@@ -19,7 +19,7 @@
           </div>
           <div class="text-right mt-4 ml-4">
             <router-link :to="'/asset/' + selectedPool.x_asset" class="btn-mktg">
-              <Ticker :asset="selectedPool.x_asset" />
+              <Ticker :asset="selectedPool.x_asset" :showIcon="true" />
             </router-link>
           </div>
         </Box>
@@ -38,7 +38,7 @@
           </div>
           <div class="text-right mt-4 ml-4">
             <router-link :to="'/asset/' + selectedPool.y_asset" class="btn-mktg">
-              <Ticker :asset="selectedPool.y_asset" />
+              <Ticker :asset="selectedPool.y_asset" :showIcon="true" />
             </router-link>
           </div>
         </Box>

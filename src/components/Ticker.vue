@@ -1,8 +1,8 @@
 <template>
   <div style="display: inline-block">
+    <AssetIcon v-if="showIcon" :symbol="assetX" size="small" />
+    <AssetIcon v-if="assetY && showIcon" :symbol="assetY" size="small" />
     <div style="display: inline-block; margin-right: 4px">{{ ticker }}</div>
-    <AssetIcon :symbol="assetX" size="small" />
-    <AssetIcon v-if="assetY" :symbol="assetY" size="small" />
   </div>
 </template>
 
@@ -12,7 +12,13 @@ import AssetIcon from '@/components/AssetIcon';
 
 export default {
   components: { AssetIcon },
-  props: ['asset'],
+  props: {
+    asset: String,
+    showIcon: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       assetX: '',
