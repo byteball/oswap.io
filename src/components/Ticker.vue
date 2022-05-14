@@ -1,8 +1,8 @@
 <template>
   <div style="display: inline-block">
-    <div style="display: inline-block; margin-right: 4px">{{ ticker }}</div>
     <AssetIcon v-if="showIcon" :symbol="assetX" size="small" />
     <AssetIcon v-if="assetY && showIcon" :symbol="assetY" size="small" />
+    <div style="display: inline-block; margin-right: 4px">{{ ticker }}</div>
   </div>
 </template>
 
