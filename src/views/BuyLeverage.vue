@@ -55,6 +55,11 @@
           The price would change too much, try a smaller amount.
         </p>
       </Box>
+      <Box>
+        <p class="m-0">
+          Your position is never liquidated. If the price goes against you, your position automatically scales down so as to keep it solvent. The position automatically scales up as the price changes in your favor.
+        </p>
+      </Box>
       <div class="text-center">
         <button
           class="btn-submit px-6 rounded-2 mb-3"
