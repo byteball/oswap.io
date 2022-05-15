@@ -216,6 +216,9 @@ export default {
       }
       console.log('data', data)
       const url = generateUri(address, data, this.inputAmount, this.inputAsset);
+
+      this.track();
+
       if (navigator.userAgent.indexOf('Firefox') != -1) {
         const opener = window.open(url, '', 'width=1,height=1,resizable=no');
         setTimeout(function() {
@@ -257,6 +260,13 @@ export default {
           this.rate = null;
         }
       }
+    },
+    track() {
+      this.$gtag.event('swap', {
+        event_category: 'swap page',
+        event_label: 'assets',
+        value: `${this.inputAsset}_${this.outputAsset}`
+      });
     }
   }
 };

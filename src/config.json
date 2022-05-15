@@ -12,7 +12,8 @@
     "factoryAddresses": ["OQLU4HOAIVJ32SDVBJA6AKD52OVTHAOF", "MODBFVX2J2TRPQUK7XFTFQK73AB64NF3"],
     "baseAddress": "DYZOJKX4MJOQRAUPX7K6WCEV5STMKOHI",
     "tokenRegistryAddress": "O6H6ZIFI57X3PLTYHOCVYPP5A553CYFQ",
-    "assetIconCdnUrl": "https://cdn.jsdelivr.net/npm/obyte-icons@latest/build"
+    "assetIconCdnUrl": "https://cdn.jsdelivr.net/npm/obyte-icons@latest/build",
+    "gtag_id": ""
   },
   "livenet": {
     "network": "livenet",
@@ -27,6 +28,7 @@
     "factoryAddresses": ["OQLU4HOAIVJ32SDVBJA6AKD52OVTHAOF", "MODBFVX2J2TRPQUK7XFTFQK73AB64NF3"],
     "baseAddress": "DYZOJKX4MJOQRAUPX7K6WCEV5STMKOHI",
     "tokenRegistryAddress": "O6H6ZIFI57X3PLTYHOCVYPP5A553CYFQ",
-    "assetIconCdnUrl": "https://cdn.jsdelivr.net/npm/obyte-icons@latest/build"
+    "assetIconCdnUrl": "https://cdn.jsdelivr.net/npm/obyte-icons@latest/build",
+    "gtag_id": ""
   }
 }

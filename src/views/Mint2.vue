@@ -129,6 +129,9 @@ export default {
     handleSubmit() {
       const address = this.selectedPool.address;
       const url = generateUri(address, null, this.inputAmount, this.inputAsset);
+
+      this.track();
+
       if (navigator.userAgent.indexOf('Firefox') != -1) {
         const opener = window.open(url, '', 'width=1,height=1,resizable=no');
         setTimeout(function() {
@@ -141,6 +144,13 @@ export default {
     onUpdatedInputAmount() {
       if (!this.inputAsset) return;
     },
+    track() {
+      this.$gtag.event('adding liquidity (one token)', {
+        event_category: 'liquidity page',
+        event_label: this.selectedPool.address,
+        value: `${this.inputAsset}`
+      });
+    }
   }
 };
 </script>
