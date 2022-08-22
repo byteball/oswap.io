@@ -1,7 +1,7 @@
 <template>
   <span>
     <a :class="customClass || 'btn-mktg'" @click="modalOpen = true">
-      <Ticker v-if="input" :asset="ticker" />
+      <Ticker v-if="input" :asset="ticker" :showIcon="true" />
       <template v-else>Select<span class="hide-sm"> a pool</span></template>
     </a>
     <ModalSelectPool :open="modalOpen" @close="modalOpen = false" @pool="input = $event" />

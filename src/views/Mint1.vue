@@ -19,7 +19,7 @@
           </div>
           <div class="text-right mt-4 ml-4">
             <router-link :to="'/asset/' + selectedPool.x_asset" class="btn-mktg">
-              <Ticker :asset="selectedPool.x_asset" />
+              <Ticker :asset="selectedPool.x_asset" :showIcon="true" />
             </router-link>
           </div>
         </Box>
@@ -38,7 +38,7 @@
           </div>
           <div class="text-right mt-4 ml-4">
             <router-link :to="'/asset/' + selectedPool.y_asset" class="btn-mktg">
-              <Ticker :asset="selectedPool.y_asset" />
+              <Ticker :asset="selectedPool.y_asset" :showIcon="true" />
             </router-link>
           </div>
         </Box>
@@ -138,6 +138,9 @@ export default {
         if (msg.body.pairing_secret === requestId) msg.reply(message);
       });
       const url = `${this.auth.invite}#${requestId}`;
+
+      this.track();
+
       if (navigator.userAgent.indexOf('Firefox') != -1) {
         const opener = window.open(url, '', 'width=1,height=1,resizable=no');
         setTimeout(function() {
@@ -146,6 +149,13 @@ export default {
       } else {
         location.href = url;
       }
+    },
+    track() {
+      this.$gtag.event('adding liquidity', {
+        event_category: 'liquidity page',
+        event_label: 'assets',
+        value: `${this.selectedPool.x_asset}_${this.selectedPool.y_asset}`
+      });
     }
   }
 };

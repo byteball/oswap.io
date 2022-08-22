@@ -19,7 +19,7 @@
         :key="i"
       >
         <div class="flex-auto">
-          <Ticker :asset="`${pool.x_asset}_${pool.y_asset}`" />
+          <Ticker :asset="`${pool.x_asset}_${pool.y_asset}`" :showIcon="true" />
           <span class="text-gray ml-2" v-text="`${pool.swapFee * 100}%`" />
         </div>
         <Amount

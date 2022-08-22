@@ -18,7 +18,7 @@
         v-for="(asset, i) in assets"
         :key="i"
       >
-        <Ticker :asset="i" />
+        <Ticker :asset="i" :showIcon="true" />
         <Amount
           class="float-right"
           v-if="balances && balances[i] && getBalance(balances, i) > 0"
