@@ -79,18 +79,39 @@
             <span class="text-white ml-2" v-text="`${pool.info.base_interest_rate * 100}%`" />
           </div>
           <div class="d-block">
-            <label>Utilization ratio</label>
+            <label class="label-padding">Utilization ratio</label>
+            <div
+              style="display: inline-block"
+              class="tooltipped tooltipped-n tooltipped-no-delay"
+              aria-label="What share of the pool's capacity is used for borrowing by leverage traders."
+            >
+              <TooltipIcon />
+            </div>
             <span class="text-white ml-2" v-text="`${(this.utilizationRatio * 100).toFixed(2)}%`" />
           </div>
           <div class="d-block">
-            <label>Actual interest rate</label>
+            <label class="label-padding">Actual interest rate</label>
+            <div
+              style="display: inline-block"
+              class="tooltipped tooltipped-n tooltipped-no-delay"
+              aria-label="Actual interest rate paid by leverage traders, it grows with utilization."
+            >
+              <TooltipIcon />
+            </div>
             <span
               class="text-white ml-2"
               v-text="`${(this.actualInterestRate * 100).toFixed(2)}%`"
             />
           </div>
           <div class="d-block">
-            <label>Borrowed amounts</label>
+            <label class="label-padding">Borrowed amounts</label>
+            <div
+              style="display: inline-block"
+              class="tooltipped tooltipped-n tooltipped-no-delay"
+              aria-label="Amounts borrowed by leverage traders from the pool to finance their leveraged positions."
+            >
+              <TooltipIcon />
+            </div>
             <span class="text-white ml-2">
               <Amount :value="borrowedAmounts.x" :asset="pool.x_asset" />
               <Ticker :asset="pool.x_asset" /> +
@@ -99,7 +120,14 @@
             </span>
           </div>
           <div class="d-block">
-            <label>Return on capital from lending alone</label>
+            <label class="label-padding">Return on capital from lending alone</label>
+            <div
+              style="display: inline-block"
+              class="tooltipped tooltipped-n tooltipped-no-delay"
+              aria-label="Earnings from providing capital to leverage traders alone."
+            >
+              <TooltipIcon />
+            </div>
             <span
               class="text-white ml-2"
               v-text="
@@ -137,11 +165,25 @@
             <span class="text-white ml-2" v-text="`${pool.info.pool_leverage}`" />
           </div>
           <div class="d-block" v-if="pool.info.mid_price">
-            <label>Mid-price</label>
+            <label class="label-padding">Mid-price</label>
+            <div
+              style="display: inline-block"
+              class="tooltipped tooltipped-n tooltipped-no-delay"
+              aria-label="Mid-price for stablecoin pools."
+            >
+              <TooltipIcon />
+            </div>
             <span class="text-white ml-2" v-text="`${pool.info.mid_price * priceMultiplier}`" />
           </div>
           <div class="d-block" v-if="pool.info.mid_price">
-            <label>Price deviation</label>
+            <label class="label-padding">Price deviation</label>
+            <div
+              style="display: inline-block"
+              class="tooltipped tooltipped-n tooltipped-no-delay"
+              aria-label="This factor indicates how far the price is allowed to deviate from the mid-price."
+            >
+              <TooltipIcon />
+            </div>
             <span class="text-white ml-2" v-text="`${pool.info.price_deviation}`" />
           </div>
           <div class="d-block">
