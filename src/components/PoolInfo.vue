@@ -113,10 +113,8 @@
               <TooltipIcon />
             </div>
             <span class="text-white ml-2">
-              <Amount :value="borrowedAmounts.x" :asset="pool.x_asset" />
-              <Ticker :asset="pool.x_asset" /> +
-              <Amount :value="borrowedAmounts.y" :asset="pool.y_asset" />
-              <Ticker :asset="pool.y_asset" />
+              <Amount :value="borrowedAmounts.x" :asset="pool.x_asset" /> <Ticker :asset="pool.x_asset" /> +
+              <Amount :value="borrowedAmounts.y" :asset="pool.y_asset" /> <Ticker :asset="pool.y_asset" />
             </span>
           </div>
           <div class="d-block">
@@ -269,8 +267,7 @@
       </div>
       <label class="d-block">Pool size</label>
       <a :href="_explorerLink(pool.address)" target="_blank">
-        <Amount :value="pool.balances.xn" :asset="pool.x_asset" />
-        <Ticker :asset="pool.x_asset" /> +
+        <Amount :value="pool.balances.xn" :asset="pool.x_asset" /> <Ticker :asset="pool.x_asset" /> +
         <Amount :value="pool.balances.yn" :asset="pool.y_asset" /> <Ticker :asset="pool.y_asset" />
         <span
           v-if="pool.hasLiquidity() && pool.marketcap"
