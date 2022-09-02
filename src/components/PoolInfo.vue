@@ -113,8 +113,7 @@
               <TooltipIcon />
             </div>
             <span class="text-white ml-2">
-              <Amount :value="borrowedAmounts.x" :asset="pool.x_asset" /> <Ticker :asset="pool.x_asset" /> +
-              <Amount :value="borrowedAmounts.y" :asset="pool.y_asset" /> <Ticker :asset="pool.y_asset" />
+              <Amount :value="borrowedAmounts.x" :asset="pool.x_asset" /> <Ticker :asset="pool.x_asset" /> + <Amount :value="borrowedAmounts.y" :asset="pool.y_asset" /> <Ticker :asset="pool.y_asset" />
             </span>
           </div>
           <div class="d-block">
@@ -256,13 +255,11 @@
         <label class="d-block">Prices</label>
         <div class="text-white">
           1 <Ticker :asset="pool.x_asset" /> ≈
-          <Amount :value="pool.getPrice(pool.x_asset, this.settings)" :asset="pool.y_asset" />
-          &nbsp;<Ticker :asset="pool.y_asset" />
+          <Amount :value="pool.getPrice(pool.x_asset, this.settings)" :asset="pool.y_asset" /> <Ticker :asset="pool.y_asset" />
         </div>
         <div class="text-white">
           1 <Ticker :asset="pool.y_asset" /> ≈
-          <Amount :value="pool.getPrice(pool.y_asset, this.settings)" :asset="pool.x_asset" />
-          &nbsp;<Ticker :asset="pool.x_asset" />
+          <Amount :value="pool.getPrice(pool.y_asset, this.settings)" :asset="pool.x_asset" /> <Ticker :asset="pool.x_asset" />
         </div>
       </div>
       <label class="d-block">Pool size</label>
