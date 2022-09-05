@@ -22,8 +22,8 @@ export function b64UriEnc(str: string) {
 export function explorerLink(str: string) {
   // return `https://${config.testnet ? 'testnet' : ''}explorer.obyte.org/#${str}`;
   return config.testnet
-    ? `https://testnetexplorer.obyte.org/#${str}`
-    : `https://digitalnerds.github.io/obyte-address-assets/#/${str}`;
+    ? `https://testnetexplorer.obyte.org/address/${str}`
+    : `https://explorer.obyte.org/address/${str}`;
 }
 
 export function statsLink(address: string) {
