@@ -1,0 +1,9 @@
+{
+  "version": "1.0",
+  "description": "Swap and forward to a destination address",
+  "homepage_url": "https://oswap.io",
+  "source_url": "https://github.com/byteball/oswap-v2-aa",
+  "field_descriptions": {
+    "data": "Data that describes forward parameters"
+  }
+}
