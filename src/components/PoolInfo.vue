@@ -181,7 +181,7 @@
             >
               <TooltipIcon />
             </div>
-            <span class="text-white ml-2" v-text="`${pool.info.price_deviation}`" />
+            <span class="text-white ml-2" v-text="`${(+pool.info.price_deviation).toLocaleString()}`" />
           </div>
           <div class="d-block">
             <label>Price range</label>
