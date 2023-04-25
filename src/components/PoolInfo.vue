@@ -11,7 +11,7 @@
           >
             <TooltipIcon />
           </div>
-          <span class="text-white ml-2" v-text="`${(pool.swapFee * 100).toLocaleString()}%`" />
+          <span class="text-white ml-2" v-text="`${(pool.swapFee * 100).toLocaleString(undefined, {maximumFractionDigits: 18})}%`" />
           <span v-if="!details"> ...</span>
           <a class="d-flex float-right" @click="details = !details">
             <span class="flex-auto text-gray" v-text="detailsText" />
@@ -32,7 +32,7 @@
             >
               <TooltipIcon />
             </div>
-            <span class="text-white ml-2" v-text="`${(pool.info.exit_fee * 100).toLocaleString()}%`" />
+            <span class="text-white ml-2" v-text="`${(pool.info.exit_fee * 100).toLocaleString(undefined, {maximumFractionDigits: 18})}%`" />
           </div>
           <div class="d-block">
             <label class="label-padding">Arb tax</label>
@@ -43,7 +43,7 @@
             >
               <TooltipIcon />
             </div>
-            <span class="text-white ml-2" v-text="`${(pool.info.arb_profit_tax * 100).toLocaleString()}%`" />
+            <span class="text-white ml-2" v-text="`${(pool.info.arb_profit_tax * 100).toLocaleString(undefined, {maximumFractionDigits: 18})}%`" />
           </div>
           <div class="d-block">
             <label class="label-padding">Leverage profit tax</label>
@@ -54,7 +54,7 @@
             >
               <TooltipIcon />
             </div>
-            <span class="text-white ml-2" v-text="`${(pool.info.leverage_profit_tax * 100).toLocaleString()}%`" />
+            <span class="text-white ml-2" v-text="`${(pool.info.leverage_profit_tax * 100).toLocaleString(undefined, {maximumFractionDigits: 18})}%`" />
           </div>
           <div class="d-block">
             <label class="label-padding">Leverage token tax</label>
@@ -65,7 +65,7 @@
             >
               <TooltipIcon />
             </div>
-            <span class="text-white ml-2" v-text="`${(pool.info.leverage_token_tax * 100).toLocaleString()}%`" />
+            <span class="text-white ml-2" v-text="`${(pool.info.leverage_token_tax * 100).toLocaleString(undefined, {maximumFractionDigits: 18})}%`" />
           </div>
           <div class="d-block">
             <label class="label-padding">Base interest rate</label>
@@ -76,7 +76,7 @@
             >
               <TooltipIcon />
             </div>
-            <span class="text-white ml-2" v-text="`${(pool.info.base_interest_rate * 100).toLocaleString()}%`" />
+            <span class="text-white ml-2" v-text="`${(pool.info.base_interest_rate * 100).toLocaleString(undefined, {maximumFractionDigits: 18})}%`" />
           </div>
           <div class="d-block">
             <label class="label-padding">Utilization ratio</label>
@@ -87,7 +87,7 @@
             >
               <TooltipIcon />
             </div>
-            <span class="text-white ml-2" v-text="`${(+(this.utilizationRatio * 100).toFixed(2)).toLocaleString()}%`" />
+            <span class="text-white ml-2" v-text="`${(+(this.utilizationRatio * 100).toFixed(2)).toLocaleString(undefined, {maximumFractionDigits: 18})}%`" />
           </div>
           <div class="d-block">
             <label class="label-padding">Actual interest rate</label>
@@ -100,7 +100,7 @@
             </div>
             <span
               class="text-white ml-2"
-              v-text="`${(+(this.actualInterestRate * 100).toFixed(2)).toLocaleString()}%`"
+              v-text="`${(+(this.actualInterestRate * 100).toFixed(2)).toLocaleString(undefined, {maximumFractionDigits: 18})}%`"
             />
           </div>
           <div class="d-block">
@@ -132,7 +132,7 @@
                   this.borrowedAmounts.borrowed_to_assets *
                   this.actualInterestRate *
                   100
-                ).toFixed(2)).toLocaleString()}%`
+                ).toFixed(2)).toLocaleString(undefined, {maximumFractionDigits: 18})}%`
               "
             />
           </div>
@@ -147,7 +147,7 @@
             </div>
             <span
               class="text-white ml-2"
-              v-text="`${(pool.info.alpha * 100).toLocaleString()}% / ${((1 - pool.info.alpha) * 100).toLocaleString()}%`"
+              v-text="`${(pool.info.alpha * 100).toLocaleString(undefined, {maximumFractionDigits: 18})}% / ${((1 - pool.info.alpha) * 100).toLocaleString(undefined, {maximumFractionDigits: 18})}%`"
             />
           </div>
           <div class="d-block">
@@ -159,7 +159,7 @@
             >
               <TooltipIcon />
             </div>
-            <span class="text-white ml-2" v-text="`${(pool.info.pool_leverage).toLocaleString()}`" />
+            <span class="text-white ml-2" v-text="`${(pool.info.pool_leverage).toLocaleString(undefined, {maximumFractionDigits: 18})}`" />
           </div>
           <div class="d-block" v-if="pool.info.mid_price">
             <label class="label-padding">Mid-price</label>
@@ -170,7 +170,7 @@
             >
               <TooltipIcon />
             </div>
-            <span class="text-white ml-2" v-text="`${(pool.info.mid_price * priceMultiplier).toLocaleString()}`" />
+            <span class="text-white ml-2" v-text="`${(pool.info.mid_price * priceMultiplier).toLocaleString(undefined, {maximumFractionDigits: 18})}`" />
           </div>
           <div class="d-block" v-if="pool.info.mid_price">
             <label class="label-padding">Price deviation</label>
@@ -181,16 +181,16 @@
             >
               <TooltipIcon />
             </div>
-            <span class="text-white ml-2" v-text="`${(+pool.info.price_deviation).toLocaleString()}`" />
+            <span class="text-white ml-2" v-text="`${(+pool.info.price_deviation).toLocaleString(undefined, {maximumFractionDigits: 18})}`" />
           </div>
           <div class="d-block">
             <label>Price range</label>
             <span
               class="text-white ml-2"
               v-text="
-                `${pool.p_min && (+(pool.p_min * priceMultiplier).toPrecision(6)).toLocaleString()} to ${(+(
+                `${pool.p_min && (+(pool.p_min * priceMultiplier).toPrecision(6)).toLocaleString(undefined, {maximumFractionDigits: 18})} to ${(+(
                   pool.p_max * priceMultiplier
-                ).toPrecision(6)).toLocaleString()}`
+                ).toPrecision(6)).toLocaleString(undefined, {maximumFractionDigits: 18})}`
               "
             />
           </div>
@@ -268,7 +268,7 @@
         <Amount :value="pool.balances.yn" :asset="pool.y_asset" /> <Ticker :asset="pool.y_asset" />
         <span
           v-if="pool.hasLiquidity() && pool.marketcap"
-          v-text="` ≈ $${(+pool.marketcap.toFixed(2)).toLocaleString()}`"
+          v-text="` ≈ $${(+pool.marketcap.toFixed(2)).toLocaleString(undefined, {maximumFractionDigits: 18})}`"
         />
         <Icon name="external-link" class="ml-1" size="18" />
       </a>
@@ -349,7 +349,7 @@ export default {
     },
     apy() {
       if (this.settings.apy7d && this.settings.apy7d[this.pool.address])
-        return this.settings.apy7d[this.pool.address].apy?.toLocaleString() || 0;
+        return this.settings.apy7d[this.pool.address].apy?.toLocaleString(undefined, {maximumFractionDigits: 18}) || 0;
       return 0;
     },
     farmingAPY() {
@@ -357,7 +357,7 @@ export default {
         const poolInfo = this.settings.farmingAPY.find((p) => p.address === this.pool.address);
 
         if (poolInfo && Number(poolInfo.apy)) {
-          return Number(poolInfo.apy).toLocaleString();
+          return Number(poolInfo.apy).toLocaleString(undefined, {maximumFractionDigits: 18});
         }
       }
 
