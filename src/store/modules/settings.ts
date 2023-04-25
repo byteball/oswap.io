@@ -11,6 +11,7 @@ import { LOCALSTORAGE_KEY } from '@/helpers/utils';
 import units from '@/helpers/units.json';
 import getAPY7d from '@/helpers/stats';
 import fetchIconsList from '@/helpers/assetIcons';
+import fetchFarmingAPY from '@/helpers/farmingAPY';
 
 const state = {
   isLoading: false,
@@ -37,7 +38,7 @@ const mutations = {
   isLoading(_state, payload) {
     Vue.set(_state, 'isLoading', payload);
   },
-  init(_state, { factory, a2sRegistry, s2aRegistry, descriptionRegistry, decimalsRegistry, assetIcons }) {
+  init(_state, { factory, a2sRegistry, s2aRegistry, descriptionRegistry, decimalsRegistry, assetIcons, farmingAPY }) {
     const lSUnit = localStorage.getItem(`${LOCALSTORAGE_KEY}.unit`);
     const assets = { base: lSUnit ? JSON.parse(lSUnit) : units[0] };
     a2sRegistry.base = assets.base.symbol;
@@ -65,6 +66,7 @@ const mutations = {
     }
     Vue.set(_state, 'assets', assets);
     Vue.set(_state, 'assetIcons', assetIcons);
+    Vue.set(_state, 'farmingAPY', farmingAPY);
   },
   unit(_state, payload) {
     Vue.set(_state.assets, 'base', payload);
@@ -114,13 +116,16 @@ const actions = {
     const descriptionRegistry = await getAAStateVars(TOKEN_REGISTRY_ADDRESS, 'current_desc_', '_');
     const decimalsRegistry = await getAAStateVars(TOKEN_REGISTRY_ADDRESS, 'decimals_', '_');
     const assetIcons = await fetchIconsList();
+    const farmingAPY = await fetchFarmingAPY();
+
     commit('init', {
       factory,
       a2sRegistry,
       s2aRegistry,
       descriptionRegistry,
       decimalsRegistry,
-      assetIcons
+      assetIcons,
+      farmingAPY
     });
     commit('isLoading', false);
     const apy7d = await getAPY7d();

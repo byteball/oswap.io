@@ -286,6 +286,29 @@
         {{ apy }}%
         <Icon name="external-link" class="ml-1" size="18" />
       </a>
+
+      <span
+        v-if="farmingAPY"
+        class="ml-2 text-white flex"
+        style="font-size: 16px; vertical-align: middle;"
+      >
+        <span
+          style="display: inline-block"
+          class="tooltipped tooltipped-n tooltipped-no-delay ml-1"
+          aria-label="Farming rewards from token.oswap.io. Click to go."
+        >
+          <a
+            :href="config.tokenFrontendUrl + '/farming'"
+            target="_blank"
+          >
+            <span >
+              +{{ farmingAPY }}%
+            </span> 
+
+            <TooltipIcon />
+          </a>
+        </span>
+      </span>
     </div>
   </div>
 </template>
@@ -293,6 +316,7 @@
 <script>
 import { generateUri, getBalance, TOKEN_REGISTRY_ADDRESS } from '@/helpers/_oswap';
 import TooltipIcon from '@/components/TooltipIcon';
+import config from '@/helpers/config';
 
 export default {
   components: { TooltipIcon },
@@ -300,7 +324,8 @@ export default {
   data() {
     return {
       details: false,
-      share: 0
+      share: 0,
+      config
     };
   },
   created() {
@@ -332,6 +357,17 @@ export default {
         return this.settings.apy7d[this.pool.address].apy;
       return null;
     },
+    farmingAPY() {
+      if (this.settings.farmingAPY && this.pool.address) {
+        const poolInfo = this.settings.farmingAPY.find((p) => p.address === this.pool.address);
+
+        if (poolInfo && Number(poolInfo.apy)) {
+          return Number(poolInfo.apy).toLocaleString();
+        } else {
+          return null;
+        }
+      }
+    },
     sharesSymbol() {
       return this.settings.assetToSymbol[this.pool.asset];
     },
@@ -357,11 +393,11 @@ export default {
           asset: this.pool.asset,
           symbol: this.proposedSharesSymbol,
           decimals: 0,
-          description: `Oswap v2 LP shares for ${this.poolName}`
+          description: `Oswap v2 LP shares for ${this.poolName}`,
         },
         0.1e9
       );
-    }
+    },
   },
   watch: {
     async pool(value, oldValue) {
@@ -369,7 +405,7 @@ export default {
         const balance = getBalance(this.auth.balances, this.pool.asset);
         this.share = parseFloat(((100 / this.pool.supply) * balance).toFixed(3));
       }
-    }
-  }
+    },
+  },
 };
 </script>
