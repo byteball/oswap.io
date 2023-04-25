@@ -24,6 +24,7 @@ const state = {
   pairs: {},
   apy7d: {},
   assetIcons: [],
+  farmingAPY: [],
   count: 0
 };
 
@@ -78,6 +79,9 @@ const mutations = {
   apy7d(_state, payload) {
     Vue.set(_state, 'apy7d', payload);
   },
+  farmingAPY(_state, payload) {
+    Vue.set(_state, 'farmingAPY', payload);
+  },
 };
 
 const actions = {
@@ -104,7 +108,19 @@ const actions = {
         factory.pairs[pair].i++;
       }
     }
-    const a2sRegistryVars = await getAAStateVars(TOKEN_REGISTRY_ADDRESS, 'a2s_', '_');
+
+    const [
+      a2sRegistryVars,
+      descriptionRegistry,
+      decimalsRegistry,
+      assetIcons,
+    ] = await Promise.all([
+      getAAStateVars(TOKEN_REGISTRY_ADDRESS, 'a2s_', '_'),
+      getAAStateVars(TOKEN_REGISTRY_ADDRESS, 'current_desc_', '_'),
+      getAAStateVars(TOKEN_REGISTRY_ADDRESS, 'decimals_', '_'),
+      fetchIconsList(),
+    ]);
+
     let a2sRegistry = {};
     let s2aRegistry = {};
     for (let var_name in a2sRegistryVars) {
@@ -113,10 +129,6 @@ const actions = {
       a2sRegistry[asset] = symbol;
       s2aRegistry[symbol] = asset;
     }
-    const descriptionRegistry = await getAAStateVars(TOKEN_REGISTRY_ADDRESS, 'current_desc_', '_');
-    const decimalsRegistry = await getAAStateVars(TOKEN_REGISTRY_ADDRESS, 'decimals_', '_');
-    const assetIcons = await fetchIconsList();
-    const farmingAPY = await fetchFarmingAPY();
 
     commit('init', {
       factory,
@@ -125,11 +137,16 @@ const actions = {
       descriptionRegistry,
       decimalsRegistry,
       assetIcons,
-      farmingAPY
     });
     commit('isLoading', false);
-    const apy7d = await getAPY7d();
+
+    const [apy7d, farmingAPY] = await Promise.all([
+      getAPY7d(),
+      fetchFarmingAPY(),
+    ]);
+
     commit('apy7d', apy7d);
+    commit('farmingAPY', farmingAPY);
   },
   unit: ({ commit }, unit) => {
     localStorage.setItem(`${LOCALSTORAGE_KEY}.unit`, JSON.stringify(unit));

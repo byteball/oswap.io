@@ -280,30 +280,23 @@
         {{ share }}%
       </span>
     </div>
-    <div v-if="apy">
+    <div v-if="apy || farmingAPY">
       <label class="d-block">APY</label>
-      <a :href="_statsLink(pool.address)" target="_blank" title="Go to stats website">
-        {{ apy }}%
-        <Icon name="external-link" class="ml-1" size="18" />
-      </a>
+      <span>
+        <a :href="_statsLink(pool.address)" target="_blank" title="Go to stats website">
+          {{ apy }}%
+          <Icon name="external-link" class="ml-1" size="18" />
+        </a>
+      </span>
 
-      <span
-        v-if="farmingAPY"
-        class="ml-2 text-white flex"
-        style="font-size: 16px; vertical-align: middle;"
-      >
+      <span v-if="farmingAPY" class="ml-2 text-white flex" style="font-size: 16px; vertical-align: middle">
         <span
           style="display: inline-block"
           class="tooltipped tooltipped-n tooltipped-no-delay ml-1"
           aria-label="Farming rewards from token.oswap.io. Click to go."
         >
-          <a
-            :href="config.tokenFrontendUrl + '/farming'"
-            target="_blank"
-          >
-            <span >
-              +{{ farmingAPY }}%
-            </span> 
+          <a :href="config.tokenFrontendUrl + '/farming'" target="_blank">
+            <span> +{{ farmingAPY }}% </span>
 
             <TooltipIcon />
           </a>
@@ -325,7 +318,7 @@ export default {
     return {
       details: false,
       share: 0,
-      config
+      config,
     };
   },
   created() {
@@ -354,8 +347,8 @@ export default {
     },
     apy() {
       if (this.settings.apy7d && this.settings.apy7d[this.pool.address])
-        return this.settings.apy7d[this.pool.address].apy;
-      return null;
+        return this.settings.apy7d[this.pool.address].apy || 0;
+      return 0;
     },
     farmingAPY() {
       if (this.settings.farmingAPY && this.pool.address) {
@@ -363,10 +356,10 @@ export default {
 
         if (poolInfo && Number(poolInfo.apy)) {
           return Number(poolInfo.apy).toLocaleString();
-        } else {
-          return null;
         }
       }
+
+      return null;
     },
     sharesSymbol() {
       return this.settings.assetToSymbol[this.pool.asset];
