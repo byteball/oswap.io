@@ -280,28 +280,30 @@
         {{ share }}%
       </span>
     </div>
-    <div v-if="apy || farmingAPY">
+    <div>
       <label class="d-block">APY</label>
-      <span>
-        <a :href="_statsLink(pool.address)" target="_blank" title="Go to stats website">
-          {{ apy }}%
-          <Icon name="external-link" class="ml-1" size="18" />
-        </a>
-      </span>
-
-      <span v-if="farmingAPY" class="ml-2 text-white flex" style="font-size: 16px; vertical-align: middle">
-        <span
-          style="display: inline-block"
-          class="tooltipped tooltipped-n tooltipped-no-delay ml-1"
-          aria-label="Farming rewards from token.oswap.io. Click to go."
-        >
-          <a :href="config.tokenFrontendUrl + '/farming'" target="_blank">
-            <span> +{{ farmingAPY }}% </span>
-
-            <TooltipIcon />
+      <div style="display: flex; align-items: center;">
+        <div>
+          <a :href="_statsLink(pool.address)" target="_blank" title="Go to stats website">
+            {{ apy }}%
+            <Icon name="external-link" class="ml-1" size="18" />
           </a>
-        </span>
-      </span>
+        </div>
+
+        <div v-if="farmingAPY" class="ml-2 text-white flex" style="font-size: 16px;">
+          <span
+            style="display: inline-block; margin-bottom: 4px;"
+            class="tooltipped tooltipped-n tooltipped-no-delay ml-1"
+            aria-label="Farming rewards from token.oswap.io. Click to go."
+          >
+            <a :href="config.tokenFrontendUrl + '/farming'" target="_blank">
+              <span> +{{ farmingAPY }}% </span>
+
+              <TooltipIcon style="margin-bottom: 1px;" />
+            </a>
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
