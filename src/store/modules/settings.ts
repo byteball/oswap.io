@@ -39,7 +39,7 @@ const mutations = {
   isLoading(_state, payload) {
     Vue.set(_state, 'isLoading', payload);
   },
-  init(_state, { factory, a2sRegistry, s2aRegistry, descriptionRegistry, decimalsRegistry, assetIcons, farmingAPY }) {
+  init(_state, { factory, a2sRegistry, s2aRegistry, descriptionRegistry, decimalsRegistry, assetIcons }) {
     const lSUnit = localStorage.getItem(`${LOCALSTORAGE_KEY}.unit`);
     const assets = { base: lSUnit ? JSON.parse(lSUnit) : units[0] };
     a2sRegistry.base = assets.base.symbol;
@@ -67,7 +67,6 @@ const mutations = {
     }
     Vue.set(_state, 'assets', assets);
     Vue.set(_state, 'assetIcons', assetIcons);
-    Vue.set(_state, 'farmingAPY', farmingAPY);
   },
   unit(_state, payload) {
     Vue.set(_state.assets, 'base', payload);
