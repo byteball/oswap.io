@@ -20,11 +20,7 @@
             class="btn-outline"
             target="_blank"
             title="Go to OSWAP token website"
-            :href="
-              config.network === 'livenet'
-                ? 'https://token.oswap.io/'
-                : 'https://testnet-token.oswap.io/'
-            "
+            :href="config.tokenFrontendUrl"
           >
             OSWAP token
           </a>

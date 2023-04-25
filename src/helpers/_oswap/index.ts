@@ -17,7 +17,7 @@ export function fromString(str: string, decimals: number = 0) {
 export function toString(amount: number, decimals: number = 0) {
   const multiplier = 10 ** decimals;
   const str = parseFloat((amount / multiplier).toFixed(decimals));
-  return isNaN(str) || str < 0 ? '' : str;
+  return isNaN(str) || str < 0 ? '' : Number(str).toLocaleString();
 }
 
 
