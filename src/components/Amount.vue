@@ -11,7 +11,11 @@ export default {
     str() {
       const asset = this.settings.assets[this.asset];
       const decimals = asset ? asset.decimals : 0;
-      return toString(this.value, decimals);
+      const multiplier = 10 ** decimals;
+
+      const str = parseFloat((this.value / multiplier).toFixed(decimals));
+
+      return isNaN(str) || str < 0 ? '' : Number(str).toLocaleString(undefined, {maximumFractionDigits: 18});
     }
   }
 };
