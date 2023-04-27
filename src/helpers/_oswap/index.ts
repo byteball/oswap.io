@@ -77,10 +77,14 @@ export async function getAAsByBaseAAs(aa: string | string[], aaParams?: object) 
 }
 
 
-export function generateUri(address, data, amount = 1e4, asset?) {
+export function generateUri(address, data, amount = 1e4, asset?, amount2?, asset2?) {
   let uri = `${config.uri}:${address}`;
   uri += `?amount=${Math.floor(amount)}`;
+  
   if (asset) uri += `&asset=${encodeURIComponent(asset)}`;
+  if (asset2) uri += `&asset2=${encodeURIComponent(asset2)}`;
+  if (amount2) uri += `&amount2=${Math.floor(amount2)}`;
+
   if (data && Object.keys(data).length > 0) {
     const json = JSON.stringify(data);
     const b64 = encodeURIComponent(Buffer.from(json).toString('base64'));
