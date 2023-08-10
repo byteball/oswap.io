@@ -52,7 +52,7 @@
         <button
           class="btn-submit px-6 rounded-2 mb-3"
           type="submit"
-          :disabled="!selectedPool || !amount_x || !amount_y || isOldFactory"
+          :disabled="!selectedPool || !amount_x || !amount_y || isOldFactory || redundantAsset === null"
         >
           Add liquidity
         </button>
@@ -62,10 +62,7 @@
 </template>
 
 <script>
-import { randomBytes } from 'crypto';
-import texto from '@/helpers/texto';
-import { generatePaymentMessage } from '@/helpers/_oswap';
-import { shorten } from '@/helpers/utils';
+import { generateUri } from '@/helpers/_oswap';
 import config from '@/helpers/config';
 
 export const FACTORY_ADDRESSES = config.factoryAddresses;
@@ -89,6 +86,25 @@ export default {
       if (value !== oldValue) {
         this.amount_x = '';
         this.amount_y = '';
+      }
+    }
+  },
+  computed: {
+    redundantAsset: function() {
+      const pool_leverage = this.selectedPool?.params?.pool_leverage;
+      const x_asset = this.selectedPool?.params?.x_asset;
+      const y_asset = this.selectedPool?.params?.y_asset;
+
+      const {x, xn} = this.selectedPool?.balances || {};
+
+      if (x_asset && y_asset && pool_leverage !== undefined) {
+        if (x / pool_leverage < xn) {
+          return x_asset;
+        } else {
+          return y_asset;
+        }
+      } else {
+        return null;
       }
     }
   },
@@ -118,26 +134,20 @@ export default {
       this.amount_y = (this.amount_x / k).toFixed();
     },
     handleSubmit() {
-      const assets = this.settings.assets;
       const address = this.selectedPool.address;
-      let amount_x = this.amount_x;
-      let amount_y = this.amount_y;
-      const payments = [
-        { address, amount: Math.floor(parseFloat(amount_x)), asset: this.selectedPool.x_asset },
-        { address, amount: Math.floor(parseFloat(amount_y)), asset: this.selectedPool.y_asset }
-      ];
-      if (this.selectedPool.x_asset !== 'base' && this.selectedPool.y_asset !== 'base')
-        payments.push({ address, amount: 1e4 });
-      const paymentJsonBase64 = generatePaymentMessage({ payments });
-      const assetXStr = assets[this.selectedPool.x_asset].symbol || shorten(this.selectedPool.x_asset);
-      const assetYStr = assets[this.selectedPool.y_asset].symbol || shorten(this.selectedPool.y_asset);
-      const pool = `${assetXStr}-${assetYStr}`;
-      const message = `Add liquidity ${pool}\n[add-liquidity](payment:${paymentJsonBase64})`;
-      const requestId = randomBytes(32).toString('base64');
-      texto.on('pairing', msg => {
-        if (msg.body.pairing_secret === requestId) msg.reply(message);
-      });
-      const url = `${this.auth.invite}#${requestId}`;
+      const x_asset = this.selectedPool.x_asset;
+      const y_asset = this.selectedPool.y_asset;
+
+      const floor_amount_x = parseFloat(this.amount_x);
+      const floor_amount_y = parseFloat(this.amount_y);
+      
+      const firstAsset = this.redundantAsset;
+      const firstAmount = this.redundantAsset === x_asset ? floor_amount_x : floor_amount_y;
+
+      const secondAsset = this.redundantAsset === x_asset ? y_asset : x_asset;
+      const secondAmount = this.redundantAsset === x_asset ? floor_amount_y : floor_amount_x;
+
+      const url = generateUri(address, {}, firstAmount, firstAsset, secondAmount, secondAsset);
 
       this.track();
 

@@ -38,7 +38,14 @@
         </div>
       </Box>
       <Box>
-        <label for="swapFee" class="d-block">Swap fee (%)</label>
+        <label for="swapFee" class="label-padding">Swap fee (%)</label>
+        <div
+            style="display: inline-block"
+            class="tooltipped tooltipped-n tooltipped-no-delay"
+            aria-label="Swapping fee, percentage of traded amount."
+        >
+          <TooltipIcon />
+        </div>
         <input
           id="swapFee"
           class="form-control input-amount border-0 p-0"
@@ -52,7 +59,14 @@
         />
       </Box>
       <Box>
-        <label for="exitFee" class="d-block">Exit fee (%)</label>
+        <label for="exitFee" class="label-padding">Exit fee (%)</label>
+        <div
+            style="display: inline-block"
+            class="tooltipped tooltipped-n tooltipped-no-delay"
+            aria-label="Fee charged when removing liquidity from the pool."
+        >
+          <TooltipIcon />
+        </div>
         <input
           id="exitFee"
           class="form-control input-amount border-0 p-0"
@@ -66,7 +80,14 @@
         />
       </Box>
       <Box>
-        <label for="arbProfitTax" class="d-block">Arbitrageur profit tax (%)</label>
+        <label for="arbProfitTax" class="label-padding">Arbitrageur profit tax (%)</label>
+        <div
+            style="display: inline-block"
+            class="tooltipped tooltipped-n tooltipped-no-delay"
+            aria-label="Additional fee that is charged as a percentage of arbitrageur profit. It is assumed that arbitrageurs buy from the pool in order to sell elsewhere and make a profit from the difference in prices."
+        >
+          <TooltipIcon />
+        </div>
         <input
           id="arbProfitTax"
           class="form-control input-amount border-0 p-0"
@@ -80,7 +101,14 @@
         />
       </Box>
       <Box>
-        <label for="leverageProfitTax" class="d-block">Tax on profit from leveraged positions (%)</label>
+        <label for="leverageProfitTax" class="label-padding">Tax on profit from leveraged positions (%)</label>
+        <div
+            style="display: inline-block"
+            class="tooltipped tooltipped-n tooltipped-no-delay"
+            aria-label="Percentage of profit charged from a leveraged position when it is closed (if the close price is higher than the open price)."
+        >
+          <TooltipIcon />
+        </div>
         <input
           id="leverageProfitTax"
           class="form-control input-amount border-0 p-0"
@@ -94,7 +122,14 @@
         />
       </Box>
       <Box>
-        <label for="leverageTokenTax" class="d-block">Tax on selling leveraged tokens (%)</label>
+        <label for="leverageTokenTax" class="label-padding">Tax on selling leveraged tokens (%)</label>
+        <div
+            style="display: inline-block"
+            class="tooltipped tooltipped-n tooltipped-no-delay"
+            aria-label="Percentage of the redeemed amount charged when redeeming a leveraged token."
+        >
+          <TooltipIcon />
+        </div>
         <input
           id="leverageTokenTax"
           class="form-control input-amount border-0 p-0"
@@ -108,7 +143,14 @@
         />
       </Box>
       <Box>
-        <label for="baseInterestRate" class="d-block">Base interest rate on borrowed funds used for leverage (%)</label>
+        <label for="baseInterestRate" class="label-padding">Base interest rate on borrowed funds used for leverage (%)</label>
+        <div
+            style="display: inline-block"
+            class="tooltipped tooltipped-n tooltipped-no-delay"
+            aria-label="Base interest rate charged from leveraged positions. If there are many leveraged positions, the rate can increase depending on utilization."
+        >
+          <TooltipIcon />
+        </div>
         <input
           id="baseInterestRate"
           class="form-control input-amount border-0 p-0"
@@ -122,7 +164,14 @@
         />
       </Box>
       <Box>
-        <label for="midPrice" class="d-block">Mid-price for stable pairs</label>
+        <label for="midPrice" class="label-padding">Mid-price for stable pairs</label>
+        <div
+            style="display: inline-block"
+            class="tooltipped tooltipped-n tooltipped-no-delay"
+            aria-label="Mid-price for stablecoin pools."
+        >
+          <TooltipIcon />
+        </div>
         <input
           id="midPrice"
           class="form-control input-amount border-0 p-0"
@@ -135,7 +184,14 @@
         />
       </Box>
       <Box>
-        <label for="priceDeviation" class="d-block">Price deviation for stable pairs</label>
+        <label for="priceDeviation" class="label-padding">Price deviation for stable pairs</label>
+        <div
+            style="display: inline-block"
+            class="tooltipped tooltipped-n tooltipped-no-delay"
+            aria-label="This factor indicates how far the price is allowed to deviate from the mid-price."
+        >
+          <TooltipIcon />
+        </div>
         <input
           id="priceDeviation"
           class="form-control input-amount border-0 p-0"
@@ -149,7 +205,14 @@
         <div v-if="symbolA && symbolB">Price range from {{p_min}} to {{p_max}} {{symbolB}} for 1 {{symbolA}}</div>
       </Box>
       <Box>
-        <label for="poolLeverage" class="d-block">Pool leverage</label>
+        <label for="poolLeverage" class="label-padding">Pool leverage</label>
+        <div
+            style="display: inline-block"
+            class="tooltipped tooltipped-n tooltipped-no-delay"
+            aria-label="A multiplier that makes the pool behave like it has more liquidity than it really has. The full multiplier is applied when the pool is balanced and it decreases as the pool goes out of balance."
+        >
+          <TooltipIcon />
+        </div>
         <input
           id="poolLeverage"
           class="form-control input-amount border-0 p-0"

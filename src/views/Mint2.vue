@@ -45,7 +45,7 @@
         <button
           class="btn-submit px-6 rounded-2 mb-3"
           type="submit"
-          :disabled="!inputAsset || !inputAmount || isOldFactory"
+          :disabled="!inputAsset || !inputAmount || isOldFactory || this.maxAmount === 0"
         >
           Add liquidity
         </button>

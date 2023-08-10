@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "description": "Initial sale of OSWAP tokens",
+  "homepage_url": "https://token.oswap.io",
+  "source_url": "https://github.com/byteball/oswap-token-aa",
+  "field_descriptions": {
+    "soft_bounce": "In case of error, send tokens back instead of bouncing.",
+    "withdraw": "Withdraw GBYTEs to exit the initial sale.",
+    "amount": "Withdrawal amount.",
+    "buy": "Buy tokens from oswap AA for the pool.",
+    "stake": "Stake the bought tokens in governance.",
+    "group_key": "Key of the group where to stake tokens.",
+    "percentages": "Distribution of votes among pools.",
+    "launch_date": "New launch date.",
+    "to": "Address to deposit to."
+  }
+}

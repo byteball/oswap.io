@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "description": "Oswap v2 factory",
+  "homepage_url": "https://oswap.io",
+  "source_url": "https://github.com/byteball/oswap-v2-aa",
+  "field_descriptions": {
+    "x_asset": "X asset",
+    "y_asset": "Y asset",
+    "locked_governance": "Fields ot editable by governance",
+    "no_leverage": "Disable leverage",
+    "shares_bonding_curve": "Bonding curve AA for shares",
+    "swap_fee": "Swap fee",
+    "exit_fee": "Exit fee",
+    "leverage_profit_tax": "Leverage profit tax",
+    "leverage_token_tax": "Leverage token tax",
+    "mid_price": "Mid-price for stable pairs",
+    "price_deviation": "Price deviation from mid-price",
+    "base_interest_rate": "Base interest charged from leverage traders",
+    "pool_leverage": "Pool leverage",
+    "alpha": "Weight of X token",
+    "period_length": "Period length"
+  }
+}

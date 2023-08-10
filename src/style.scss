@@ -255,3 +255,50 @@ a.btn-submit.disabled {
 .label-padding {
   padding-right: 4px;
 }
+
+.menu-wrap {
+  width: 200px;
+  top: 60px;
+  right: 0;
+  padding: 5px;
+  border-color: #586069;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  background: #131519;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+@media screen and (max-width: 400px) {
+  .hide-for-mob {
+    display: none !important;
+  }
+  .show-for-mob {
+    display: block !important;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .position-static-for-tablet {
+    position: static !important; 
+  }
+
+  .no-padding-for-tablet {
+    padding: 0 !important; 
+  }
+
+  .no-margin-for-tablet {
+    margin: 0 !important; 
+  }
+
+  .hide-for-tablet {
+    display: none !important;
+  }
+
+  .inline-flex-for-tablet {
+    display: inline-flex !important;
+  }
+}
