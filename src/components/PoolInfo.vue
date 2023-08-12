@@ -4,14 +4,16 @@
       <div class="mb-2">
         <div class="d-block">
           <label class="label-padding">Swap fee</label>
-          <div
+          <Tooltip
             style="display: inline-block"
-            class="tooltipped tooltipped-n tooltipped-no-delay"
-            aria-label="Swapping fee, percentage of traded amount."
-          >
-            <TooltipIcon />
-          </div>
-          <span class="text-white ml-2" v-text="`${(pool.swapFee * 100).toLocaleString(undefined, {maximumFractionDigits: 18})}%`" />
+            tooltip-description="Swapping fee, percentage of traded amount."
+          />
+          <span
+            class="text-white ml-2"
+            v-text="
+              `${(pool.swapFee * 100).toLocaleString(undefined, { maximumFractionDigits: 18 })}%`
+            "
+          />
           <span v-if="!details"> ...</span>
           <a class="d-flex float-right" @click="details = !details">
             <span class="flex-auto text-gray" v-text="detailsText" />
@@ -25,106 +27,128 @@
         <div v-if="details">
           <div class="d-block">
             <label class="label-padding">Exit fee</label>
-            <div
+            <Tooltip
               style="display: inline-block"
-              class="tooltipped tooltipped-n tooltipped-no-delay"
-              aria-label="Fee charged when removing liquidity from the pool."
-            >
-              <TooltipIcon />
-            </div>
-            <span class="text-white ml-2" v-text="`${(pool.info.exit_fee * 100).toLocaleString(undefined, {maximumFractionDigits: 18})}%`" />
+              tooltip-description="Fee charged when removing liquidity from the pool."
+            />
+            <span
+              class="text-white ml-2"
+              v-text="
+                `${(pool.info.exit_fee * 100).toLocaleString(undefined, {
+                  maximumFractionDigits: 18
+                })}%`
+              "
+            />
           </div>
           <div class="d-block">
             <label class="label-padding">Arb tax</label>
-            <div
+            <Tooltip
               style="display: inline-block"
-              class="tooltipped tooltipped-n tooltipped-no-delay"
-              aria-label="Additional fee that is charged as a percentage of arbitrageur profit. It is assumed that arbitrageurs buy from the pool in order to sell elsewhere and make a profit from the difference in prices."
-            >
-              <TooltipIcon />
-            </div>
-            <span class="text-white ml-2" v-text="`${(pool.info.arb_profit_tax * 100).toLocaleString(undefined, {maximumFractionDigits: 18})}%`" />
+              tooltip-description="Additional fee that is charged as a percentage of arbitrageur profit. It is assumed that arbitrageurs buy from the pool in order to sell elsewhere and make a profit from the difference in prices."
+            />
+            <span
+              class="text-white ml-2"
+              v-text="
+                `${(pool.info.arb_profit_tax * 100).toLocaleString(undefined, {
+                  maximumFractionDigits: 18
+                })}%`
+              "
+            />
           </div>
           <div class="d-block">
             <label class="label-padding">Leverage profit tax</label>
-            <div
+            <Tooltip
               style="display: inline-block"
-              class="tooltipped tooltipped-n tooltipped-no-delay"
-              aria-label="Percentage of profit charged from a leveraged position when it is closed (if the close price is higher than the open price)."
-            >
-              <TooltipIcon />
-            </div>
-            <span class="text-white ml-2" v-text="`${(pool.info.leverage_profit_tax * 100).toLocaleString(undefined, {maximumFractionDigits: 18})}%`" />
+              tooltip-description="Percentage of profit charged from a leveraged position when it is closed (if the close price is higher than the open price)."
+            />
+            <span
+              class="text-white ml-2"
+              v-text="
+                `${(pool.info.leverage_profit_tax * 100).toLocaleString(undefined, {
+                  maximumFractionDigits: 18
+                })}%`
+              "
+            />
           </div>
           <div class="d-block">
             <label class="label-padding">Leverage token tax</label>
-            <div
+            <Tooltip
               style="display: inline-block"
-              class="tooltipped tooltipped-n tooltipped-no-delay"
-              aria-label="Percentage of the redeemed amount charged when redeeming a leveraged token."
-            >
-              <TooltipIcon />
-            </div>
-            <span class="text-white ml-2" v-text="`${(pool.info.leverage_token_tax * 100).toLocaleString(undefined, {maximumFractionDigits: 18})}%`" />
+              tooltip-description="Percentage of the redeemed amount charged when redeeming a leveraged token."
+            />
+            <span
+              class="text-white ml-2"
+              v-text="
+                `${(pool.info.leverage_token_tax * 100).toLocaleString(undefined, {
+                  maximumFractionDigits: 18
+                })}%`
+              "
+            />
           </div>
           <div class="d-block">
             <label class="label-padding">Base interest rate</label>
-            <div
+            <Tooltip
               style="display: inline-block"
-              class="tooltipped tooltipped-n tooltipped-no-delay"
-              aria-label="Base interest rate charged from leveraged positions. If there are many leveraged positions, the rate can increase depending on utilization."
-            >
-              <TooltipIcon />
-            </div>
-            <span class="text-white ml-2" v-text="`${(pool.info.base_interest_rate * 100).toLocaleString(undefined, {maximumFractionDigits: 18})}%`" />
+              tooltip-description="Base interest rate charged from leveraged positions. If there are many leveraged positions, the rate can increase depending on utilization."
+            />
+            <span
+              class="text-white ml-2"
+              v-text="
+                `${(pool.info.base_interest_rate * 100).toLocaleString(undefined, {
+                  maximumFractionDigits: 18
+                })}%`
+              "
+            />
           </div>
           <div class="d-block">
             <label class="label-padding">Utilization ratio</label>
-            <div
+            <Tooltip
               style="display: inline-block"
-              class="tooltipped tooltipped-n tooltipped-no-delay"
-              aria-label="What share of the pool's capacity is used for borrowing by leverage traders."
-            >
-              <TooltipIcon />
-            </div>
-            <span class="text-white ml-2" v-text="`${(+(this.utilizationRatio * 100).toFixed(2)).toLocaleString(undefined, {maximumFractionDigits: 18})}%`" />
+              tooltip-description="What share of the pool's capacity is used for borrowing by leverage traders."
+            />
+            <span
+              class="text-white ml-2"
+              v-text="
+                `${(+(this.utilizationRatio * 100).toFixed(2)).toLocaleString(undefined, {
+                  maximumFractionDigits: 18
+                })}%`
+              "
+            />
           </div>
           <div class="d-block">
             <label class="label-padding">Actual interest rate</label>
-            <div
+            <Tooltip
               style="display: inline-block"
-              class="tooltipped tooltipped-n tooltipped-no-delay"
-              aria-label="Actual interest rate paid by leverage traders, it grows with utilization."
-            >
-              <TooltipIcon />
-            </div>
+              tooltip-description="Actual interest rate paid by leverage traders, it grows with utilization."
+            />
             <span
               class="text-white ml-2"
-              v-text="`${(+(this.actualInterestRate * 100).toFixed(2)).toLocaleString(undefined, {maximumFractionDigits: 18})}%`"
+              v-text="
+                `${(+(this.actualInterestRate * 100).toFixed(2)).toLocaleString(undefined, {
+                  maximumFractionDigits: 18
+                })}%`
+              "
             />
           </div>
           <div class="d-block">
             <label class="label-padding">Borrowed amounts</label>
-            <div
+            <Tooltip
               style="display: inline-block"
-              class="tooltipped tooltipped-n tooltipped-no-delay"
-              aria-label="Amounts borrowed by leverage traders from the pool to finance their leveraged positions."
-            >
-              <TooltipIcon />
-            </div>
+              tooltip-description="Amounts borrowed by leverage traders from the pool to finance their leveraged positions."
+            />
             <span class="text-white ml-2">
-              <Amount :value="borrowedAmounts.x" :asset="pool.x_asset" /> <Ticker :asset="pool.x_asset" /> + <Amount :value="borrowedAmounts.y" :asset="pool.y_asset" /> <Ticker :asset="pool.y_asset" />
+              <Amount :value="borrowedAmounts.x" :asset="pool.x_asset" />
+              <Ticker :asset="pool.x_asset" /> +
+              <Amount :value="borrowedAmounts.y" :asset="pool.y_asset" />
+              <Ticker :asset="pool.y_asset" />
             </span>
           </div>
           <div class="d-block">
             <label class="label-padding">Return on capital from lending alone</label>
-            <div
+            <Tooltip
               style="display: inline-block"
-              class="tooltipped tooltipped-n tooltipped-no-delay"
-              aria-label="Earnings from providing capital to leverage traders alone."
-            >
-              <TooltipIcon />
-            </div>
+              tooltip-description="Earnings from providing capital to leverage traders alone."
+            />
             <span
               class="text-white ml-2"
               v-text="
@@ -132,65 +156,83 @@
                   this.borrowedAmounts.borrowed_to_assets *
                   this.actualInterestRate *
                   100
-                ).toFixed(2)).toLocaleString(undefined, {maximumFractionDigits: 18})}%`
+                ).toFixed(2)).toLocaleString(undefined, { maximumFractionDigits: 18 })}%`
               "
             />
           </div>
           <div class="d-block">
             <label class="label-padding">Token weights</label>
-            <div
+            <Tooltip
               style="display: inline-block"
-              class="tooltipped tooltipped-n tooltipped-no-delay"
-              aria-label="Relative weights of the two tokens in the pool."
-            >
-              <TooltipIcon />
-            </div>
+              tooltip-description="Relative weights of the two tokens in the pool."
+            />
             <span
               class="text-white ml-2"
-              v-text="`${(pool.info.alpha * 100).toLocaleString(undefined, {maximumFractionDigits: 18})}% / ${((1 - pool.info.alpha) * 100).toLocaleString(undefined, {maximumFractionDigits: 18})}%`"
+              v-text="
+                `${(pool.info.alpha * 100).toLocaleString(undefined, {
+                  maximumFractionDigits: 18
+                })}% / ${((1 - pool.info.alpha) * 100).toLocaleString(undefined, {
+                  maximumFractionDigits: 18
+                })}%`
+              "
             />
           </div>
           <div class="d-block">
             <label class="label-padding">Pool leverage</label>
-            <div
+            <Tooltip
               style="display: inline-block"
-              class="tooltipped tooltipped-n tooltipped-no-delay"
-              aria-label="A multiplier that makes the pool behave like it has more liquidity than it really has. The full multiplier is applied when the pool is balanced and it decreases as the pool goes out of balance."
-            >
-              <TooltipIcon />
-            </div>
-            <span class="text-white ml-2" v-text="`${(pool.info.pool_leverage).toLocaleString(undefined, {maximumFractionDigits: 18})}`" />
+              tooltip-description="A multiplier that makes the pool behave like it has more liquidity than it really has. The full multiplier is applied when the pool is balanced and it decreases as the pool goes out of balance."
+            />
+            <span
+              class="text-white ml-2"
+              v-text="
+                `${pool.info.pool_leverage.toLocaleString(undefined, {
+                  maximumFractionDigits: 18
+                })}`
+              "
+            />
           </div>
           <div class="d-block" v-if="pool.info.mid_price">
             <label class="label-padding">Mid-price</label>
-            <div
+            <Tooltip
               style="display: inline-block"
-              class="tooltipped tooltipped-n tooltipped-no-delay"
-              aria-label="Mid-price for stablecoin pools."
-            >
-              <TooltipIcon />
-            </div>
-            <span class="text-white ml-2" v-text="`${(pool.info.mid_price * priceMultiplier).toLocaleString(undefined, {maximumFractionDigits: 18})}`" />
+              tooltip-description="Mid-price for stablecoin pools."
+            />
+            <span
+              class="text-white ml-2"
+              v-text="
+                `${(pool.info.mid_price * priceMultiplier).toLocaleString(undefined, {
+                  maximumFractionDigits: 18
+                })}`
+              "
+            />
           </div>
           <div class="d-block" v-if="pool.info.mid_price">
             <label class="label-padding">Price deviation</label>
-            <div
+            <Tooltip
               style="display: inline-block"
-              class="tooltipped tooltipped-n tooltipped-no-delay"
-              aria-label="This factor indicates how far the price is allowed to deviate from the mid-price."
-            >
-              <TooltipIcon />
-            </div>
-            <span class="text-white ml-2" v-text="`${(+pool.info.price_deviation).toLocaleString(undefined, {maximumFractionDigits: 18})}`" />
+              tooltip-description="This factor indicates how far the price is allowed to deviate from the mid-price."
+            />
+            <span
+              class="text-white ml-2"
+              v-text="
+                `${(+pool.info.price_deviation).toLocaleString(undefined, {
+                  maximumFractionDigits: 18
+                })}`
+              "
+            />
           </div>
           <div class="d-block">
             <label>Price range</label>
             <span
               class="text-white ml-2"
               v-text="
-                `${pool.p_min && (+(pool.p_min * priceMultiplier).toPrecision(6)).toLocaleString(undefined, {maximumFractionDigits: 18})} to ${(+(
-                  pool.p_max * priceMultiplier
-                ).toPrecision(6)).toLocaleString(undefined, {maximumFractionDigits: 18})}`
+                `${pool.p_min &&
+                  (+(pool.p_min * priceMultiplier).toPrecision(6)).toLocaleString(undefined, {
+                    maximumFractionDigits: 18
+                  })} to ${(+(pool.p_max * priceMultiplier).toPrecision(
+                  6
+                )).toLocaleString(undefined, { maximumFractionDigits: 18 })}`
               "
             />
           </div>
@@ -255,20 +297,27 @@
         <label class="d-block">Prices</label>
         <div class="text-white">
           1 <Ticker :asset="pool.x_asset" /> ≈
-          <Amount :value="pool.getPrice(pool.x_asset, this.settings)" :asset="pool.y_asset" /> <Ticker :asset="pool.y_asset" />
+          <Amount :value="pool.getPrice(pool.x_asset, this.settings)" :asset="pool.y_asset" />
+          <Ticker :asset="pool.y_asset" />
         </div>
         <div class="text-white">
           1 <Ticker :asset="pool.y_asset" /> ≈
-          <Amount :value="pool.getPrice(pool.y_asset, this.settings)" :asset="pool.x_asset" /> <Ticker :asset="pool.x_asset" />
+          <Amount :value="pool.getPrice(pool.y_asset, this.settings)" :asset="pool.x_asset" />
+          <Ticker :asset="pool.x_asset" />
         </div>
       </div>
       <label class="d-block">Pool size</label>
       <a :href="_explorerLink(pool.address)" target="_blank">
-        <Amount :value="pool.balances.xn" :asset="pool.x_asset" /> <Ticker :asset="pool.x_asset" /> +
+        <Amount :value="pool.balances.xn" :asset="pool.x_asset" />
+        <Ticker :asset="pool.x_asset" /> +
         <Amount :value="pool.balances.yn" :asset="pool.y_asset" /> <Ticker :asset="pool.y_asset" />
         <span
           v-if="pool.hasLiquidity() && pool.marketcap"
-          v-text="` ≈ $${(+pool.marketcap.toFixed(2)).toLocaleString(undefined, {maximumFractionDigits: 18})}`"
+          v-text="
+            ` ≈ $${(+pool.marketcap.toFixed(2)).toLocaleString(undefined, {
+              maximumFractionDigits: 18
+            })}`
+          "
         />
         <Icon name="external-link" class="ml-1" size="18" />
       </a>
@@ -312,15 +361,16 @@
 import { generateUri, getBalance, TOKEN_REGISTRY_ADDRESS } from '@/helpers/_oswap';
 import TooltipIcon from '@/components/TooltipIcon';
 import config from '@/helpers/config';
+import Tooltip from '@/components/Tooltip.vue';
 
 export default {
-  components: { TooltipIcon },
+  components: { Tooltip, TooltipIcon },
   props: ['pool'],
   data() {
     return {
       details: false,
       share: 0,
-      config,
+      config
     };
   },
   created() {
@@ -349,15 +399,19 @@ export default {
     },
     apy() {
       if (this.settings.apy7d && this.settings.apy7d[this.pool.address])
-        return this.settings.apy7d[this.pool.address].apy?.toLocaleString(undefined, {maximumFractionDigits: 18}) || 0;
+        return (
+          this.settings.apy7d[this.pool.address].apy?.toLocaleString(undefined, {
+            maximumFractionDigits: 18
+          }) || 0
+        );
       return 0;
     },
     farmingAPY() {
       if (this.settings.farmingAPY && this.pool.address) {
-        const poolInfo = this.settings.farmingAPY.find((p) => p.address === this.pool.address);
+        const poolInfo = this.settings.farmingAPY.find(p => p.address === this.pool.address);
 
         if (poolInfo && Number(poolInfo.apy)) {
-          return Number(poolInfo.apy).toLocaleString(undefined, {maximumFractionDigits: 18});
+          return Number(poolInfo.apy).toLocaleString(undefined, { maximumFractionDigits: 18 });
         }
       }
 
@@ -388,11 +442,11 @@ export default {
           asset: this.pool.asset,
           symbol: this.proposedSharesSymbol,
           decimals: 0,
-          description: `Oswap v2 LP shares for ${this.poolName}`,
+          description: `Oswap v2 LP shares for ${this.poolName}`
         },
         0.1e9
       );
-    },
+    }
   },
   watch: {
     async pool(value, oldValue) {
@@ -400,7 +454,7 @@ export default {
         const balance = getBalance(this.auth.balances, this.pool.asset);
         this.share = parseFloat(((100 / this.pool.supply) * balance).toFixed(3));
       }
-    },
-  },
+    }
+  }
 };
 </script>

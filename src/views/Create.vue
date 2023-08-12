@@ -39,13 +39,10 @@
       </Box>
       <Box>
         <label for="swapFee" class="label-padding">Swap fee (%)</label>
-        <div
-            style="display: inline-block"
-            class="tooltipped tooltipped-n tooltipped-no-delay"
-            aria-label="Swapping fee, percentage of traded amount."
-        >
-          <TooltipIcon />
-        </div>
+        <Tooltip
+          style="display: inline-block"
+          tooltip-description="Swapping fee, percentage of traded amount."
+        />
         <input
           id="swapFee"
           class="form-control input-amount border-0 p-0"
@@ -60,13 +57,10 @@
       </Box>
       <Box>
         <label for="exitFee" class="label-padding">Exit fee (%)</label>
-        <div
-            style="display: inline-block"
-            class="tooltipped tooltipped-n tooltipped-no-delay"
-            aria-label="Fee charged when removing liquidity from the pool."
-        >
-          <TooltipIcon />
-        </div>
+        <Tooltip
+          style="display: inline-block"
+          tooltip-description="Fee charged when removing liquidity from the pool."
+        />
         <input
           id="exitFee"
           class="form-control input-amount border-0 p-0"
@@ -81,13 +75,10 @@
       </Box>
       <Box>
         <label for="arbProfitTax" class="label-padding">Arbitrageur profit tax (%)</label>
-        <div
-            style="display: inline-block"
-            class="tooltipped tooltipped-n tooltipped-no-delay"
-            aria-label="Additional fee that is charged as a percentage of arbitrageur profit. It is assumed that arbitrageurs buy from the pool in order to sell elsewhere and make a profit from the difference in prices."
-        >
-          <TooltipIcon />
-        </div>
+        <Tooltip
+          style="display: inline-block"
+          tooltip-description="Additional fee that is charged as a percentage of arbitrageur profit. It is assumed that arbitrageurs buy from the pool in order to sell elsewhere and make a profit from the difference in prices."
+        />
         <input
           id="arbProfitTax"
           class="form-control input-amount border-0 p-0"
@@ -101,14 +92,13 @@
         />
       </Box>
       <Box>
-        <label for="leverageProfitTax" class="label-padding">Tax on profit from leveraged positions (%)</label>
-        <div
-            style="display: inline-block"
-            class="tooltipped tooltipped-n tooltipped-no-delay"
-            aria-label="Percentage of profit charged from a leveraged position when it is closed (if the close price is higher than the open price)."
+        <label for="leverageProfitTax" class="label-padding"
+          >Tax on profit from leveraged positions (%)</label
         >
-          <TooltipIcon />
-        </div>
+        <Tooltip
+          style="display: inline-block"
+          tooltip-description="Percentage of profit charged from a leveraged position when it is closed (if the close price is higher than the open price)."
+        />
         <input
           id="leverageProfitTax"
           class="form-control input-amount border-0 p-0"
@@ -122,14 +112,13 @@
         />
       </Box>
       <Box>
-        <label for="leverageTokenTax" class="label-padding">Tax on selling leveraged tokens (%)</label>
-        <div
-            style="display: inline-block"
-            class="tooltipped tooltipped-n tooltipped-no-delay"
-            aria-label="Percentage of the redeemed amount charged when redeeming a leveraged token."
+        <label for="leverageTokenTax" class="label-padding"
+          >Tax on selling leveraged tokens (%)</label
         >
-          <TooltipIcon />
-        </div>
+        <Tooltip
+          style="display: inline-block"
+          tooltip-description="Percentage of the redeemed amount charged when redeeming a leveraged token."
+        />
         <input
           id="leverageTokenTax"
           class="form-control input-amount border-0 p-0"
@@ -143,14 +132,13 @@
         />
       </Box>
       <Box>
-        <label for="baseInterestRate" class="label-padding">Base interest rate on borrowed funds used for leverage (%)</label>
-        <div
-            style="display: inline-block"
-            class="tooltipped tooltipped-n tooltipped-no-delay"
-            aria-label="Base interest rate charged from leveraged positions. If there are many leveraged positions, the rate can increase depending on utilization."
+        <label for="baseInterestRate" class="label-padding"
+          >Base interest rate on borrowed funds used for leverage (%)</label
         >
-          <TooltipIcon />
-        </div>
+        <Tooltip
+          style="display: inline-block"
+          tooltip-description="Base interest rate charged from leveraged positions. If there are many leveraged positions, the rate can increase depending on utilization."
+        />
         <input
           id="baseInterestRate"
           class="form-control input-amount border-0 p-0"
@@ -165,13 +153,10 @@
       </Box>
       <Box>
         <label for="midPrice" class="label-padding">Mid-price for stable pairs</label>
-        <div
-            style="display: inline-block"
-            class="tooltipped tooltipped-n tooltipped-no-delay"
-            aria-label="Mid-price for stablecoin pools."
-        >
-          <TooltipIcon />
-        </div>
+        <Tooltip
+          style="display: inline-block"
+          tooltip-description="Mid-price for stablecoin pools."
+        />
         <input
           id="midPrice"
           class="form-control input-amount border-0 p-0"
@@ -185,13 +170,10 @@
       </Box>
       <Box>
         <label for="priceDeviation" class="label-padding">Price deviation for stable pairs</label>
-        <div
-            style="display: inline-block"
-            class="tooltipped tooltipped-n tooltipped-no-delay"
-            aria-label="This factor indicates how far the price is allowed to deviate from the mid-price."
-        >
-          <TooltipIcon />
-        </div>
+        <Tooltip
+          style="display: inline-block"
+          tooltip-description="This factor indicates how far the price is allowed to deviate from the mid-price."
+        />
         <input
           id="priceDeviation"
           class="form-control input-amount border-0 p-0"
@@ -202,17 +184,16 @@
           min="0"
           step="0.00000001"
         />
-        <div v-if="symbolA && symbolB">Price range from {{p_min}} to {{p_max}} {{symbolB}} for 1 {{symbolA}}</div>
+        <div v-if="symbolA && symbolB">
+          Price range from {{ p_min }} to {{ p_max }} {{ symbolB }} for 1 {{ symbolA }}
+        </div>
       </Box>
       <Box>
         <label for="poolLeverage" class="label-padding">Pool leverage</label>
-        <div
-            style="display: inline-block"
-            class="tooltipped tooltipped-n tooltipped-no-delay"
-            aria-label="A multiplier that makes the pool behave like it has more liquidity than it really has. The full multiplier is applied when the pool is balanced and it decreases as the pool goes out of balance."
-        >
-          <TooltipIcon />
-        </div>
+        <Tooltip
+          style="display: inline-block"
+          tooltip-description="A multiplier that makes the pool behave like it has more liquidity than it really has. The full multiplier is applied when the pool is balanced and it decreases as the pool goes out of balance."
+        />
         <input
           id="poolLeverage"
           class="form-control input-amount border-0 p-0"
@@ -240,7 +221,9 @@
         />
       </Box>
       <Box>
-        <label for="periodLength" class="d-block">Period to track min and max prices for one-sided liquidity adds/removals</label>
+        <label for="periodLength" class="d-block"
+          >Period to track min and max prices for one-sided liquidity adds/removals</label
+        >
         <input
           id="periodLength"
           class="form-control input-amount border-0 p-0"
@@ -254,7 +237,9 @@
         />
       </Box>
       <Box>
-        <label for="shares_bonding_curve" class="d-block">Bonding curve for shares (the default is linear)</label>
+        <label for="shares_bonding_curve" class="d-block"
+          >Bonding curve for shares (the default is linear)</label
+        >
         <input
           id="shares_bonding_curve"
           class="form-control input-amount border-0 p-0"
@@ -265,7 +250,13 @@
         />
       </Box>
       <div class="text-center mb-4">
-        <button class="btn-submit px-6 rounded-2 mb-3" type="submit" :disabled="!assetA || !assetB || +poolLeverage === 1/alpha || +poolLeverage === 1/(1-alpha)">
+        <button
+          class="btn-submit px-6 rounded-2 mb-3"
+          type="submit"
+          :disabled="
+            !assetA || !assetB || +poolLeverage === 1 / alpha || +poolLeverage === 1 / (1 - alpha)
+          "
+        >
           Create a pool
         </button>
       </div>
@@ -276,10 +267,12 @@
 <script>
 import { b64UriDec } from '@/helpers/utils';
 import { generateUri, FACTORY_ADDRESSES } from '@/helpers/_oswap';
+import Tooltip from '@/components/Tooltip.vue';
 
 const linear_bonding_curve = 'IXBHF6T4IKMYAFGRM54F5FVMXGKCTFNT';
 
 export default {
+  components: { Tooltip },
   data() {
     return {
       assetOrSymbolA: 'GBYTE',
@@ -311,14 +304,13 @@ export default {
         this.assetA = false;
         this.symbolA = false;
         this.decimalsA = 0;
-        if (value.length === 44 || value === 'base'){
+        if (value.length === 44 || value === 'base') {
           this.assetA = value;
           if (this.assetToSymbol[value]) {
             this.symbolA = this.assetToSymbol[value];
             this.decimalsA = this.decimals[value] || 0;
           }
-        }
-        else if (this.symbolToAsset[value]) {
+        } else if (this.symbolToAsset[value]) {
           const asset = this.symbolToAsset[value];
           this.assetA = asset;
           this.symbolA = value;
@@ -331,14 +323,13 @@ export default {
         this.assetB = false;
         this.symbolB = false;
         this.decimalsB = 0;
-        if (value.length === 44 || value === 'base'){
+        if (value.length === 44 || value === 'base') {
           this.assetB = value;
           if (this.assetToSymbol[value]) {
             this.symbolB = this.assetToSymbol[value];
             this.decimalsB = this.decimals[value] || 0;
           }
-        }
-        else if (this.symbolToAsset[value]) {
+        } else if (this.symbolToAsset[value]) {
           const asset = this.symbolToAsset[value];
           this.assetB = asset;
           this.symbolB = value;
@@ -357,19 +348,23 @@ export default {
     decimals() {
       return this.settings.decimals;
     },
-    priceMultiplier(){
-      return 10**(this.decimalsA - this.decimalsB);
+    priceMultiplier() {
+      return 10 ** (this.decimalsA - this.decimalsB);
     },
-    p_max(){
+    p_max() {
       if (!+this.midPrice || !+this.priceDeviation) return Infinity;
       const beta = 1 - this.alpha;
-      return (this.alpha / beta * this.priceDeviation ** (1 / beta) * this.midPrice).toPrecision(6);
+      return ((this.alpha / beta) * this.priceDeviation ** (1 / beta) * this.midPrice).toPrecision(
+        6
+      );
     },
-    p_min(){
+    p_min() {
       if (!+this.midPrice || !+this.priceDeviation) return 0;
       const beta = 1 - this.alpha;
-      return (this.alpha / beta / this.priceDeviation ** (1 / beta) * this.midPrice).toPrecision(6);
-    },
+      return ((this.alpha / beta / this.priceDeviation ** (1 / beta)) * this.midPrice).toPrecision(
+        6
+      );
+    }
   },
   created() {
     const assetB = this.$route.params[0] || this.$route.params.pathMatch || '';
@@ -380,18 +375,21 @@ export default {
       const data = {
         x_asset: this.assetA,
         y_asset: this.assetB,
-        swap_fee: this.swapFee/100,
-        exit_fee: this.exitFee/100,
-        arb_profit_tax: this.arbProfitTax/100,
-        leverage_profit_tax: this.leverageProfitTax/100,
-        leverage_token_tax: this.leverageTokenTax/100,
-        base_interest_rate: this.baseInterestRate/100,
-        ...(+this.midPrice && {mid_price: +this.midPrice / this.priceMultiplier}), // from display units to pennies
-        ...(+this.priceDeviation && {price_deviation: +this.priceDeviation}),
+        swap_fee: this.swapFee / 100,
+        exit_fee: this.exitFee / 100,
+        arb_profit_tax: this.arbProfitTax / 100,
+        leverage_profit_tax: this.leverageProfitTax / 100,
+        leverage_token_tax: this.leverageTokenTax / 100,
+        base_interest_rate: this.baseInterestRate / 100,
+        ...(+this.midPrice && { mid_price: +this.midPrice / this.priceMultiplier }), // from display units to pennies
+        ...(+this.priceDeviation && { price_deviation: +this.priceDeviation }),
         pool_leverage: +this.poolLeverage,
         alpha: +this.alpha,
         period_length: +this.periodLength,
-        ...(this.shares_bonding_curve && this.shares_bonding_curve !== linear_bonding_curve && {shares_bonding_curve: this.shares_bonding_curve}),
+        ...(this.shares_bonding_curve &&
+          this.shares_bonding_curve !== linear_bonding_curve && {
+            shares_bonding_curve: this.shares_bonding_curve
+          })
       };
       const url = generateUri(FACTORY_ADDRESSES[0], data);
       if (navigator.userAgent.indexOf('Firefox') != -1) {

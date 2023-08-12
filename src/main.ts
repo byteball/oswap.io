@@ -4,6 +4,8 @@ import VueI18n from 'vue-i18n';
 import VueGtag from 'vue-gtag';
 import { upperFirst, camelCase } from 'lodash';
 import makeBlockie from 'ethereum-blockies-base64';
+import FloatingVue from 'floating-vue';
+
 import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
@@ -14,8 +16,14 @@ import messages from '@/helpers/messages.json';
 import numberFormats from '@/helpers/number.json';
 import '@/style.scss';
 
+import 'floating-vue/dist/style.css';
+
+FloatingVue.options.themes.tooltip.triggers = ['click', 'hover', 'focus', 'touch'];
+
 Vue.use(VueUi);
 Vue.use(VueI18n);
+Vue.use(FloatingVue);
+
 const i18n = new VueI18n({ locale: 'en', messages, numberFormats });
 
 Vue.use(
