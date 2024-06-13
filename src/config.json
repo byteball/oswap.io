@@ -15,7 +15,8 @@
     "baseAddress": "DYZOJKX4MJOQRAUPX7K6WCEV5STMKOHI",
     "tokenRegistryAddress": "O6H6ZIFI57X3PLTYHOCVYPP5A553CYFQ",
     "assetIconCdnUrl": "https://cdn.jsdelivr.net/npm/obyte-icons@latest/build",
-    "gtag_id": ""
+    "gtag_id": "",
+    "hub_host": "https://testnet.obyte.org/api"
   },
   "livenet": {
     "network": "livenet",
@@ -33,6 +34,7 @@
     "baseAddress": "DYZOJKX4MJOQRAUPX7K6WCEV5STMKOHI",
     "tokenRegistryAddress": "O6H6ZIFI57X3PLTYHOCVYPP5A553CYFQ",
     "assetIconCdnUrl": "https://cdn.jsdelivr.net/npm/obyte-icons@latest/build",
-    "gtag_id": ""
+    "gtag_id": "",
+    "hub_host": "https://obyte.org/api"
   }
 }

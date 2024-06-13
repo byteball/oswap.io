@@ -1,5 +1,5 @@
-import client from '@/helpers/client';
 import config from '@/helpers/config';
+import { request } from '@/helpers/httpClient';
 
 export const FACTORY_ADDRESSES = config.factoryAddresses;
 export const BASE_ADDRESS = config.baseAddress;
@@ -41,14 +41,14 @@ export async function getInfo(address) {
 
 export async function getAADefinition(address: string) {
   if (!definitions[address])
-    definitions[address] = await client.requestAsync('light/get_definition', address);
+    definitions[address] = await request('light/get_definition', { address });
   return definitions[address];
 }
 
 export async function getAAState(address: string, delimiter?: string) {
   if (cachedStateVars[address] && cachedStateVars[address].ts > Date.now() - 3000)
     return cachedStateVars[address].state;
-  const state = await client.requestAsync('light/get_aa_state_vars', { address });
+  const state = await request('light/get_aa_state_vars', { address });
   cachedStateVars[address] = { state, ts: Date.now() };
   return state;
 }
@@ -62,7 +62,7 @@ export async function getAAStates(addresses: string[]) {
 }
 
 export async function getAAStateVars(address: string, var_prefix: string, delimiter?: string) {
-  const state = await client.requestAsync('light/get_aa_state_vars', { address, var_prefix });
+  const state = await request('light/get_aa_state_vars', { address, var_prefix });
   return state;
 }
 
@@ -73,7 +73,7 @@ export async function getAAsByBaseAAs(aa: string | string[], aaParams?: object) 
   } else {
     params['base_aas'] = aa;
   }
-  return await client.requestAsync('light/get_aas_by_base_aas', params);
+  return await request('light/get_aas_by_base_aas', params);
 }
 
 
