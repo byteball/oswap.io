@@ -11,7 +11,6 @@ const request = async (url: string, options = {}) => {
     mode: 'cors',
     ...options
   });
-  console.log('resp', response);
 
   if (response.status !== 200) {
     const { error } = await response.json();

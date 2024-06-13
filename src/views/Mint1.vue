@@ -76,11 +76,6 @@ export default {
       poolAddress: this.$route.params.poolAddress
     };
   },
-  computed: {
-    isOldFactory(){
-      return this.selectedPool && this.settings.pools[this.selectedPool.address].factoryAddress !== FACTORY_ADDRESSES[0];
-    },
-  },
   watch: {
     async selectedPool(value, oldValue) {
       if (value !== oldValue) {
@@ -90,6 +85,12 @@ export default {
     }
   },
   computed: {
+    isOldFactory() {
+      return (
+        this.selectedPool &&
+        this.settings.pools[this.selectedPool.address].factoryAddress !== FACTORY_ADDRESSES[0]
+      );
+    },
     redundantAsset: function() {
       const pool_leverage = this.selectedPool?.params?.pool_leverage;
       const x_asset = this.selectedPool?.params?.x_asset;
