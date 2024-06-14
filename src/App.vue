@@ -17,6 +17,9 @@ export default {
   },
   created() {
     this.$store.dispatch('init');
+    if (location.hash) {
+      this.$router.push(location.hash.substring(1));
+    }
   }
 };
 </script>

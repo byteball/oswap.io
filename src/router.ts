@@ -14,7 +14,7 @@ const SellLeverage = () => import(/* webpackChunkName: "asset" */ '@/views/SellL
 Vue.use(Router);
 
 const router = new Router({
-  mode: 'hash',
+  mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     { path: '/', name: 'home', component: Home },
