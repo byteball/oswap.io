@@ -55,7 +55,7 @@
             <path d="M16 8L8 16M8 8L16 16" stroke="white" stroke-width="2" stroke-linecap="round" />
           </svg>
 
-          <div v-if="shownMobMenu" class="position-absolute menu-wrap">
+          <div v-if="shownMobMenu" class="position-absolute menu-wrap" style="z-index: 9">
             <!-- Mob menu -->
             <a v-if="!address" @click="handleLogin" class="btn-outline mb-2">Log in</a>
             <a @click="modalAccountOpen = true" class="btn-outline mb-2" v-else>
@@ -97,11 +97,11 @@
         </div>
       </div>
 
-      <h1 class="pt-4 no-padding-for-tablet">
-        <router-link :to="{ name: 'home' }" class="text-white" style="font-size: 64px">
-          <img src="~/@/assets/logo.svg" class="mt-4 no-margin-for-tablet" height="64" />
+      <div class="pt-7 no-padding-for-tablet" style="padding-bottom: 26.5px !important">
+        <router-link :to="{ name: 'home' }" style="position: relative">
+          <img src="~/@/assets/logo.svg" height="64" />
         </router-link>
-      </h1>
+      </div>
       <div class="container-sm px-3">
         <div id="nav" class="clearfix bg-gray-9 d-flex rounded-2">
           <router-link
@@ -112,7 +112,13 @@
             }"
             class="d-block col-4 rounded-2"
           >
-            Swap
+            <h1
+              v-if="this.$route.name === 'home' || this.$route.name === 'swap'"
+              style="font: inherit"
+            >
+              Swap
+            </h1>
+            <template v-else>Swap</template>
           </router-link>
           <router-link
             :to="{

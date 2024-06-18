@@ -1,7 +1,7 @@
 <template>
   <Box>
     <a class="d-flex" @click="open = !open">
-      <h2 class="flex-auto" v-text="items[current].name" />
+      <h1 style="font-size: 22px !important" class="flex-auto" v-text="items[current].name" />
       <Icon class="mt-1" :name="open ? 'arrow-up' : 'arrow-down'" />
     </a>
     <div v-if="open">
@@ -11,7 +11,7 @@
         :to="{ name: item.to, params: { poolAddress: $route.params.poolAddress } }"
         class="d-block"
       >
-        <h2 v-text="item.name" class="mt-2" />
+        <span style="font-size: 22px !important" v-text="item.name" class="mt-2" />
       </router-link>
     </div>
   </Box>
