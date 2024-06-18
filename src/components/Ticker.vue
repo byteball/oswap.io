@@ -2,7 +2,10 @@
   <div style="display: inline-block">
     <AssetIcon v-if="showIcon" :symbol="assetX" size="small" />
     <AssetIcon v-if="assetY && showIcon" :symbol="assetY" size="small" />
-    <div style="display: inline-block; margin-right: 4px">{{ ticker }}</div>
+    <h2 v-if="isH2" style="display: inline-block; margin-right: 4px">
+      {{ ticker }}
+    </h2>
+    <div v-else style="display: inline-block; margin-right: 4px">{{ ticker }}</div>
   </div>
 </template>
 
@@ -15,6 +18,10 @@ export default {
   props: {
     asset: String,
     showIcon: {
+      type: Boolean,
+      default: false
+    },
+    isH2: {
       type: Boolean,
       default: false
     }

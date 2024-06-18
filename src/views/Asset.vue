@@ -2,8 +2,8 @@
   <div class="container-sm px-3">
     <Box>
       <h1 v-if="id.length === 44 || id === 'base'">
-        <span v-if="id !== 'base'">{{ id | shorten }}</span>
-        <span v-else><Ticker class="h2" :asset="`${id}`"/></span>
+        <template v-if="id !== 'base'">{{ id | shorten }}</template>
+        <template v-else><Ticker class="h2" :asset="`${id}`"/></template>
       </h1>
       <h1 v-else>Invalid asset ID</h1>
       <div v-if="symbol" class="mt-2">
