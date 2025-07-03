@@ -11,6 +11,8 @@
   </span>
 </template>
 
+
+
 <script>
 import { getBalance } from '@/helpers/_oswap';
 
@@ -24,10 +26,9 @@ export default {
     getLinkToGetMeIn() {
       const { address } = this.auth;
       let link = 'https://getmein.ooo/';
+
       if (address) {
-        link += `?recipient=${address}&dst_network=Obyte`;
-      } else {
-        link += '?dst_network=Obyte';
+        link += `?recipient=${address}`;
       }
 
       return link;
