@@ -193,7 +193,7 @@ export default {
         L: leverage,
         asset,
         sell: 1,
-        delta: delta * 0.999,
+        delta: delta * 0.99,
       };
       if (this.leverageType === 'position')
         data.position = this.position_id;
