@@ -123,6 +123,13 @@ export default {
           ? [info.y_asset, info.x_asset]
           : [info.x_asset, info.y_asset];
       }
+    } else {
+      const savedInputAsset = localStorage.getItem('inputAsset');
+      const savedOutputAsset = localStorage.getItem('outputAsset');
+      if (savedInputAsset && savedOutputAsset) {
+        this.inputAsset = savedInputAsset;
+        this.outputAsset = savedOutputAsset;
+      }
     }
   },
   watch: {
@@ -130,12 +137,14 @@ export default {
       if (value !== oldValue) {
         await this.init();
         this.updateOutputAmount();
+        localStorage.setItem('inputAsset', value);
       }
     },
     async outputAsset(value, oldValue) {
       if (value !== oldValue) {
         await this.init();
         this.updateOutputAmount();
+        localStorage.setItem('outputAsset', value);
       }
     }
   },
