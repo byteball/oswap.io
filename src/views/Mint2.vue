@@ -92,7 +92,7 @@ export default {
       return +toString(this.maxAmount, this.getDecimals(this.inputAsset));
     },
     isOldFactory(){
-      return this.selectedPool && this.settings.pools[this.selectedPool.address].factoryAddress !== FACTORY_ADDRESSES[0];
+      return this.selectedPool && this.settings.pools[this.selectedPool.address].factoryAddress === FACTORY_ADDRESSES[FACTORY_ADDRESSES.length - 1];
     },
   },
   methods: {

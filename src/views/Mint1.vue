@@ -88,7 +88,7 @@ export default {
     isOldFactory() {
       return (
         this.selectedPool &&
-        this.settings.pools[this.selectedPool.address].factoryAddress !== FACTORY_ADDRESSES[0]
+        this.settings.pools[this.selectedPool.address].factoryAddress === FACTORY_ADDRESSES[FACTORY_ADDRESSES.length - 1]
       );
     },
     redundantAsset: function() {
